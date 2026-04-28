@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+*.env
+.env
+.env.local
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+
+# Django collected static files
+staticfiles/
+static/
+media/
+
+# If you keep only user-uploaded media
+# comment "media/" if you want to track it
+
+# VSCode
+.vscode/
+.code-workspace
+
+# PyCharm
+.idea/
+
+# Migrations (optional)
+# Uncomment ONLY if you do NOT want migrations in Git
+# */migrations/
+# */migrations/*.py
+# EXCEPT __init__.py
+# !*/migrations/__init__.py
+
+# Byte-compiled / optimized / DLL files
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Logs
+*.log
+log/
+logs/
+
+# Coverage / Testing
+.coverage
+coverage.xml
+htmlcov/
+
+# Docker
+docker-compose.override.yml
+docker_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache
+*.cache
+.cache/
+pip-log.txt
