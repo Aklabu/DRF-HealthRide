@@ -1,0 +1,1 @@
+Health Ride NEMT is a SaaS platform for non-emergency medical transportation companies. It lets providers manage their entire operation — drivers, vehicles, passengers, trips, billing, and compliance — from one place.
