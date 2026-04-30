@@ -143,7 +143,7 @@ AUTH_USER_MODEL = 'accounts.Provider'
 
 # Rest Framework configuration
 REST_FRAMEWORK = {
-    "EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler",
+    "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
