@@ -2,4 +2,6 @@ from django.apps import AppConfig
 
 
 class PassengersConfig(AppConfig):
-    name = 'passengers'
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.passengers'
+    label = 'passengers'
