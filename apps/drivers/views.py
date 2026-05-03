@@ -38,7 +38,7 @@ def get_week_window(offset=0):
     return monday, sunday
 
 
-# driver list and create view
+# driver list + create endpoint
 class DriverListCreateView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -73,7 +73,21 @@ class DriverListCreateView(APIView):
         )
 
     def post(self, request):
-        serializer = DriverCreateSerializer(data=request.data)
+        # When sending multipart/form-data from Postman, the availability field
+        # arrives as a raw JSON string — parse it into a list before validation
+        import json
+        request_data = request.data.copy()
+        if 'availability' in request_data and isinstance(request_data['availability'], str):
+            try:
+                request_data['availability'] = json.loads(request_data['availability'])
+            except (json.JSONDecodeError, ValueError):
+                from utils.response import CustomResponse as CR
+                return CR.error(
+                    message='availability must be a valid JSON array.',
+                    status_code=400
+                )
+
+        serializer = DriverCreateSerializer(data=request_data)
         if not serializer.is_valid():
             return CustomResponse.error(
                 message='Validation failed.',
@@ -200,7 +214,7 @@ class DriverListCreateView(APIView):
         )
 
 
-# Driver detail view — GET header info, PATCH update editable fields
+# driver details + update endpoint (excluding related models)
 class DriverDetailView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -245,7 +259,7 @@ class DriverDetailView(APIView):
         )
 
 
-# Driver overview view — GET emergency contact + vehicle info + certifications, PATCH update these fields
+# emergency contact + vehicle assignment + certifications in one endpoint for easy management
 class DriverOverviewView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -370,7 +384,7 @@ class DriverOverviewView(APIView):
         return self.get(request, id)
 
 
-# Document view — GET list of documents with latest file + expiry, PATCH upload new document
+# group driver documents by type, return latest per type + upload new document
 class DriverDocumentView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -433,7 +447,7 @@ class DriverDocumentView(APIView):
         return self.get(request, id)
 
 
-# Driver availability view — GET weekly availability, PATCH update availability
+# fetch or update driver availability for each day of the week
 class DriverAvailabilityView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -486,7 +500,7 @@ class DriverAvailabilityView(APIView):
         return self.get(request, id)
 
 
-# payment information view — GET earnings summary for current/last week + average, PATCH not allowed
+# payment info + weekly breakdown
 class DriverWorkingHoursView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -556,7 +570,7 @@ class DriverWorkingHoursView(APIView):
         )
 
 
-# earnings view — GET earnings summary for current/last week + month + total, PATCH not allowed
+# earnings summary + recent payouts
 class DriverEarningsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -603,7 +617,7 @@ class DriverEarningsView(APIView):
         )
 
 
-# payout view — POST with from_date + to_date to create payout record for that range
+# create new payout record for a driver based on date range
 class DriverPayoutView(APIView):
     permission_classes = [IsAuthenticated]
 
