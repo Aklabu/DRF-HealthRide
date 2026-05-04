@@ -182,3 +182,7 @@ CACHES = {
         "LOCATION": env('REDIS_URL', default='redis://localhost:6379/1'),
     }
 }
+
+
+# Google Maps API Key
+GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default='')
