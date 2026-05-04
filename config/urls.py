@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/drivers/', include('apps.drivers.urls')),
     path('api/passengers/', include('apps.passengers.urls')),
     path('api/facilities/', include('apps.facilities.urls')),
+    path('api/trips/', include('apps.trips.urls')),
 ]
 
 # Serve media files in development
