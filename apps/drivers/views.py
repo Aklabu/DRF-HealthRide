@@ -38,7 +38,8 @@ def get_week_window(offset=0):
     return monday, sunday
 
 
-# driver list + create endpoint
+# GET /api/drivers/ — header stats + driver list
+# POST /api/drivers/ — create new driver
 class DriverListCreateView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -73,21 +74,46 @@ class DriverListCreateView(APIView):
         )
 
     def post(self, request):
-        # When sending multipart/form-data from Postman, the availability field
-        # arrives as a raw JSON string — parse it into a list before validation
         import json
-        request_data = request.data.copy()
-        if 'availability' in request_data and isinstance(request_data['availability'], str):
+
+        # Parse availability separately — it arrives as a JSON string in multipart/form-data
+        availability_raw = request.data.get('availability', '[]')
+        if isinstance(availability_raw, str):
             try:
-                request_data['availability'] = json.loads(request_data['availability'])
+                availability = json.loads(availability_raw)
             except (json.JSONDecodeError, ValueError):
-                from utils.response import CustomResponse as CR
-                return CR.error(
+                return CustomResponse.error(
                     message='availability must be a valid JSON array.',
                     status_code=400
                 )
+        else:
+            availability = availability_raw
 
-        serializer = DriverCreateSerializer(data=request_data)
+        # Validate availability structure manually
+        if not isinstance(availability, list):
+            return CustomResponse.error(
+                message='availability must be a list of day objects.',
+                status_code=400
+            )
+        for day in availability:
+            if not isinstance(day, dict):
+                return CustomResponse.error(
+                    message='Each item in availability must be an object with day_of_week, is_available, start_time, end_time.',
+                    status_code=400
+                )
+            if 'day_of_week' not in day:
+                return CustomResponse.error(
+                    message='Each availability item must include day_of_week.',
+                    status_code=400
+                )
+            if day.get('is_available') and (not day.get('start_time') or not day.get('end_time')):
+                return CustomResponse.error(
+                    message=f'start_time and end_time are required when is_available is true (day_of_week: {day["day_of_week"]}).',
+                    status_code=400
+                )
+
+        # Pass everything except availability to the serializer
+        serializer = DriverCreateSerializer(data=request.data)
         if not serializer.is_valid():
             return CustomResponse.error(
                 message='Validation failed.',
@@ -96,6 +122,7 @@ class DriverListCreateView(APIView):
             )
 
         data = serializer.validated_data
+        data['availability'] = availability
 
         # Validate vehicle if provided
         vehicle = None
@@ -214,7 +241,8 @@ class DriverListCreateView(APIView):
         )
 
 
-# driver details + update endpoint (excluding related models)
+# GET /api/drivers/{id}/ — driver profile header
+# PATCH /api/drivers/{id}/ — edit driver header
 class DriverDetailView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -259,7 +287,8 @@ class DriverDetailView(APIView):
         )
 
 
-# emergency contact + vehicle assignment + certifications in one endpoint for easy management
+# GET /api/drivers/{id}/overview/ — emergency contact + vehicle + certifications
+# PATCH /api/drivers/{id}/overview/ — update overview fields
 class DriverOverviewView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -384,7 +413,8 @@ class DriverOverviewView(APIView):
         return self.get(request, id)
 
 
-# group driver documents by type, return latest per type + upload new document
+# GET /api/drivers/{id}/documents/ — grouped by document type
+# PATCH /api/drivers/{id}/documents/ — upload new document version
 class DriverDocumentView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -447,7 +477,8 @@ class DriverDocumentView(APIView):
         return self.get(request, id)
 
 
-# fetch or update driver availability for each day of the week
+# GET /api/drivers/{id}/availability/ — full 7-day schedule
+# PATCH /api/drivers/{id}/availability/ — update specific days
 class DriverAvailabilityView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -500,7 +531,7 @@ class DriverAvailabilityView(APIView):
         return self.get(request, id)
 
 
-# payment info + weekly breakdown
+# GET /api/drivers/{id}/working-hours/ — payment info + weekly breakdown
 class DriverWorkingHoursView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -570,7 +601,7 @@ class DriverWorkingHoursView(APIView):
         )
 
 
-# earnings summary + recent payouts
+# GET /api/drivers/{id}/earnings/ — earnings summary + recent payouts
 class DriverEarningsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -617,7 +648,7 @@ class DriverEarningsView(APIView):
         )
 
 
-# create new payout record for a driver based on date range
+# POST /api/drivers/{id}/payouts/ — preview or create payout
 class DriverPayoutView(APIView):
     permission_classes = [IsAuthenticated]
 

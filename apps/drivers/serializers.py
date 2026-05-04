@@ -37,15 +37,10 @@ class DriverListSerializer(serializers.ModelSerializer):
         return None
 
     def get_earnings_this_week(self, obj):
-        # Current Mon–Sun window
+        from django.db.models import Sum
         today = timezone.now().date()
         monday = today - timezone.timedelta(days=today.weekday())
         sunday = monday + timezone.timedelta(days=6)
-        total = obj.work_logs.filter(
-            date__gte=monday, date__lte=sunday
-        ).aggregate(total=serializers.DecimalField)
-        # Use values sum directly
-        from django.db.models import Sum
         result = obj.work_logs.filter(
             date__gte=monday, date__lte=sunday
         ).aggregate(total=Sum('earnings'))
@@ -94,11 +89,6 @@ class DriverCreateSerializer(serializers.Serializer):
     cpr_certificate_file = serializers.FileField(required=False, allow_null=True)
     background_check_file = serializers.FileField(required=False, allow_null=True)
 
-    # Availability — array of 7 day objects
-    availability = serializers.ListField(
-        child=serializers.DictField(), required=False, default=list
-    )
-
     def validate_email(self, value):
         if Driver.objects.filter(email=value).exists():
             raise serializers.ValidationError('A driver with this email already exists.')
@@ -122,17 +112,10 @@ class DriverCreateSerializer(serializers.Serializer):
                 if file.size > 10 * 1024 * 1024:
                     raise serializers.ValidationError({field: 'File size must not exceed 10MB.'})
 
-        # Validate availability array structure
-        for day in attrs.get('availability', []):
-            if 'day_of_week' not in day:
-                raise serializers.ValidationError({'availability': 'Each day object must include day_of_week.'})
-            if day.get('is_available') and (not day.get('start_time') or not day.get('end_time')):
-                raise serializers.ValidationError({'availability': 'start_time and end_time are required when is_available is true.'})
-
         return attrs
 
 
-# Driver header serializer for driver dashboard
+# Driver header serializer
 class DriverHeaderSerializer(serializers.ModelSerializer):
 
     license = serializers.SerializerMethodField()
@@ -184,7 +167,7 @@ class DriverHeaderSerializer(serializers.ModelSerializer):
         return result['total'] or '0.00'
 
 
-# Driver header update serializer 
+# Driver header update serializer
 class DriverHeaderUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -237,7 +220,7 @@ class DriverDocumentSerializer(serializers.ModelSerializer):
         return None
 
 
-# Document upload serializer 
+# Document upload serializer
 class DriverDocumentUploadSerializer(serializers.Serializer):
 
     document_type = serializers.ChoiceField(
