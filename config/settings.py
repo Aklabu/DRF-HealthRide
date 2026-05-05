@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
 
     # Local apps
     'apps.accounts',
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,7 +100,6 @@ DATABASES = {
         default=f'sqlite:///{os.path.join(BASE_DIR, "db.sqlite3")}'
     )
 }
-
 
 
 # Password validation
@@ -186,3 +187,12 @@ CACHES = {
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default='')
+
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS')
+
+
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
