@@ -670,7 +670,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"admin@citynemt.com\",\r\n    \"otp_code\": \"507240\"\r\n}",
+              "raw": "{\r\n    \"email\": \"admin@citynemt.com\",\r\n    \"otp_code\": \"704609\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -5956,6 +5956,4399 @@
               ],
               "cookie": [],
               "body": "{\n    \"success\": true,\n    \"statusCode\": 201,\n    \"message\": \"Payout created successfully.\",\n    \"timestamp\": \"2026-05-03T23:14:42.296466+00:00\",\n    \"data\": {\n        \"payout_id\": \"f9406c45-2e27-4045-aef8-30cba0bfd71f\",\n        \"from_date\": \"2025-01-08\",\n        \"to_date\": \"2025-01-14\",\n        \"total_hours\": \"0\",\n        \"total_amount\": \"0.00\",\n        \"created_at\": \"2026-05-03T23:14:42.292421Z\",\n        \"confirmed\": true\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "passengers",
+      "item": [
+        {
+          "name": "List Passengers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 21:40:30 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "548"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passengers fetched successfully.\",\n    \"timestamp\": \"2026-05-04T21:40:30.591688+00:00\",\n    \"data\": {\n        \"header\": {\n            \"total_passengers\": 1,\n            \"active_passengers\": 1,\n            \"outstanding_balance\": \"0.00\",\n            \"total_trips\": 0\n        },\n        \"passengers\": [\n            {\n                \"id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\n                \"name\": \"John Doe\",\n                \"profile_picture\": null,\n                \"contact_number\": \"+1234567890\",\n                \"contact_email\": \"john@example.com\",\n                \"mobility\": \"ambulatory\",\n                \"insurance_type\": \"BlueCross\",\n                \"insurance_id\": \"BC-00123\",\n                \"total_trips\": 0,\n                \"completed_trips\": 0,\n                \"status\": \"active\"\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Passenger",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"date_of_birth\": \"1985-06-15\",\r\n  \"phone_number\": \"+1234567890\",\r\n  \"email\": \"john@example.com\",\r\n  \"preferred_language\": \"English\",\r\n\r\n  \"street_address\": \"123 Main St\",\r\n  \"apartment\": \"4B\",\r\n  \"city\": \"New York\",\r\n  \"state\": \"NY\",\r\n  \"zip_code\": \"10001\",\r\n\r\n  \"special_requirements\": \"standard\",\r\n  \"medical_notes\": \"Diabetic — carry glucose tablets\",\r\n  \"special_assistance_needs\": \"Requires assistance boarding\",\r\n\r\n  \"ec_full_name\": \"Jane Doe\",\r\n  \"ec_phone_number\": \"+0987654321\",\r\n  \"ec_email\": \"jane@example.com\",\r\n  \"ec_relation\": \"mother\",\r\n  \"ec_home_address\": \"456 Oak Ave, Brooklyn, NY 11201\",\r\n\r\n  \"insurance_provider\": \"BlueCross\",\r\n  \"policy_number\": \"BC-00123\",\r\n  \"medicare_number\": \"MED-456\",\r\n  \"medicaid_number\": null,\r\n  \"effective_date\": \"2024-01-01\",\r\n  \"expiry_date\": \"2025-01-01\",\r\n\r\n  \"common_locations\": [\r\n    { \"location_name\": \"Home\", \"full_address\": \"123 Main St, New York, NY 10001\" },\r\n    { \"location_name\": \"Clinic\", \"full_address\": \"789 Health Blvd, New York, NY 10002\" }\r\n  ],\r\n\r\n  \"facilities\": [\r\n    \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\"\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/passengers/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"date_of_birth\": \"1985-06-15\",\r\n  \"phone_number\": \"+1234567890\",\r\n  \"email\": \"john@example.com\",\r\n  \"preferred_language\": \"English\",\r\n\r\n  \"street_address\": \"123 Main St\",\r\n  \"apartment\": \"4B\",\r\n  \"city\": \"New York\",\r\n  \"state\": \"NY\",\r\n  \"zip_code\": \"10001\",\r\n\r\n  \"special_requirements\": \"standard\",\r\n  \"medical_notes\": \"Diabetic — carry glucose tablets\",\r\n  \"special_assistance_needs\": \"Requires assistance boarding\",\r\n\r\n  \"ec_full_name\": \"Jane Doe\",\r\n  \"ec_phone_number\": \"+0987654321\",\r\n  \"ec_email\": \"jane@example.com\",\r\n  \"ec_relation\": \"mother\",\r\n  \"ec_home_address\": \"456 Oak Ave, Brooklyn, NY 11201\",\r\n\r\n  \"insurance_provider\": \"BlueCross\",\r\n  \"policy_number\": \"BC-00123\",\r\n  \"medicare_number\": \"MED-456\",\r\n  \"medicaid_number\": null,\r\n  \"effective_date\": \"2024-01-01\",\r\n  \"expiry_date\": \"2025-01-01\",\r\n\r\n  \"common_locations\": [\r\n    { \"location_name\": \"Home\", \"full_address\": \"123 Main St, New York, NY 10001\" },\r\n    { \"location_name\": \"Clinic\", \"full_address\": \"789 Health Blvd, New York, NY 10002\" }\r\n  ],\r\n\r\n  \"facilities\": [\r\n    \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\"\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 21:40:16 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "530"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 201,\n    \"message\": \"Passenger created successfully.\",\n    \"timestamp\": \"2026-05-04T21:40:16.114874+00:00\",\n    \"data\": {\n        \"id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\n        \"name\": \"John Doe\",\n        \"profile_picture\": null,\n        \"phone_number\": \"+1234567890\",\n        \"email\": \"john@example.com\",\n        \"date_of_birth\": \"1985-06-15\",\n        \"home_address\": \"123 Main St, 4B, New York, NY, 10001\",\n        \"mobility\": \"ambulatory\",\n        \"preferred_language\": \"English\",\n        \"total_trips\": 0,\n        \"completed_trips\": 0,\n        \"total_spent\": \"0.00\",\n        \"outstanding_balance\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Passenger Detail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:01:49 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "530"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:01:49.434912+00:00\",\n    \"data\": {\n        \"id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\n        \"name\": \"John Doe\",\n        \"profile_picture\": null,\n        \"phone_number\": \"+1234567890\",\n        \"email\": \"john@example.com\",\n        \"date_of_birth\": \"1985-06-15\",\n        \"home_address\": \"123 Main St, 4B, New York, NY, 10001\",\n        \"mobility\": \"ambulatory\",\n        \"preferred_language\": \"English\",\n        \"total_trips\": 0,\n        \"completed_trips\": 0,\n        \"total_spent\": \"0.00\",\n        \"outstanding_balance\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Passenger Detail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "first_name",
+                  "value": "Alan",
+                  "type": "text"
+                },
+                {
+                  "key": "profile_picture",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Pictures/unnamed_sxNhnfH.jpg"
+                },
+                {
+                  "key": "email",
+                  "value": "alan@sunrise.com",
+                  "type": "text"
+                },
+                {
+                  "key": "phone_number",
+                  "value": "+1234567890",
+                  "type": "text"
+                },
+                {
+                  "key": "mobility",
+                  "value": "stretcher",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "value": "New York",
+                  "type": "text"
+                },
+                {
+                  "key": "zip_code",
+                  "value": "10010",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "first_name",
+                      "value": "Alan",
+                      "type": "text"
+                    },
+                    {
+                      "key": "profile_picture",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Pictures/unnamed_sxNhnfH.jpg"
+                    },
+                    {
+                      "key": "email",
+                      "value": "alan@sunrise.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "phone_number",
+                      "value": "+1234567890",
+                      "type": "text"
+                    },
+                    {
+                      "key": "mobility",
+                      "value": "stretcher",
+                      "type": "text"
+                    },
+                    {
+                      "key": "status",
+                      "value": "active",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "New York",
+                      "type": "text"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "10010",
+                      "type": "text"
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:21:57 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "594"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:21:57.188767+00:00\",\n    \"data\": {\n        \"id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\n        \"name\": \"Alan Doe\",\n        \"profile_picture\": \"http://127.0.0.1:8000/media/passengers/profiles/unnamed_sxNhnfH.jpg\",\n        \"phone_number\": \"+1234567890\",\n        \"email\": \"alan@sunrise.com\",\n        \"date_of_birth\": \"1985-06-15\",\n        \"home_address\": \"123 Main St, 4B, New York, NY, 10010\",\n        \"mobility\": \"stretcher\",\n        \"preferred_language\": \"English\",\n        \"total_trips\": 0,\n        \"completed_trips\": 0,\n        \"total_spent\": \"0.00\",\n        \"outstanding_balance\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Passenger Overview",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/overview/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "overview",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:23:15 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "568"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:23:15.878873+00:00\",\n    \"data\": {\n        \"emergency_contact\": {\n            \"full_name\": \"Jane Doe\",\n            \"phone_number\": \"+0987654321\",\n            \"relation\": \"mother\"\n        },\n        \"common_locations\": [\n            {\n                \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\n                \"location_name\": \"Home\",\n                \"full_address\": \"123 Main St, New York, NY 10001\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"dcff9c02-b713-4434-969d-4f83fc9a1bab\",\n                \"location_name\": \"Clinic\",\n                \"full_address\": \"789 Health Blvd, New York, NY 10002\",\n                \"trips_count\": 0\n            }\n        ],\n        \"preferred_drivers\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Get Passenger Overview",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\r\n  \"emergency_contact\": {\r\n    \"full_name\": \"Jane Doe\",\r\n    \"phone_number\": \"+0987654321\",\r\n    \"relation\": \"mother\"\r\n  },\r\n  \"common_locations\": [\r\n    {\r\n      \"id\": \"loc-uuid-...\",\r\n      \"location_name\": \"Clinic\",\r\n      \"full_address\": \"789 Health Blvd, New York, NY 10002\",\r\n      \"trips_count\": 8\r\n    },\r\n    {\r\n      \"id\": \"loc-uuid-...\",\r\n      \"location_name\": \"Home\",\r\n      \"full_address\": \"123 Main St, New York, NY 10001\",\r\n      \"trips_count\": 4\r\n    }\r\n  ],\r\n  \"preferred_drivers\": [\r\n    {\r\n      \"driver_name\": \"Mike Smith\",\r\n      \"driver_image\": \"http://localhost:8000/media/drivers/mike.jpg\",\r\n      \"trips_count\": 7\r\n    }\r\n  ]\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Passenger Overview",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"common_locations\": [\r\n    {\r\n      \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\r\n      \"location_name\": \"New Clinic\",\r\n      \"full_address\": \"999 Health Ave, New York, NY 10004\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/overview/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "overview",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Update Emergency Contact Only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"ec_full_name\": \"Jane Doe\",\r\n  \"ec_phone_number\": \"+0987654321\",\r\n  \"ec_email\": \"jane@example.com\",\r\n  \"ec_relation\": \"father\",\r\n  \"ec_home_address\": \"456 Oak Ave, Brooklyn, NY 11201\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:27:05 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "568"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:27:05.964425+00:00\",\n    \"data\": {\n        \"emergency_contact\": {\n            \"full_name\": \"Jane Doe\",\n            \"phone_number\": \"+0987654321\",\n            \"relation\": \"father\"\n        },\n        \"common_locations\": [\n            {\n                \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\n                \"location_name\": \"Home\",\n                \"full_address\": \"123 Main St, New York, NY 10001\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"dcff9c02-b713-4434-969d-4f83fc9a1bab\",\n                \"location_name\": \"Clinic\",\n                \"full_address\": \"789 Health Blvd, New York, NY 10002\",\n                \"trips_count\": 0\n            }\n        ],\n        \"preferred_drivers\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Add a New Common Location",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"common_locations\": [\r\n    {\r\n      \"location_name\": \"Hospital\",\r\n      \"full_address\": \"100 Hospital Rd, New York, NY 10003\"\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:27:53 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "710"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:27:53.430301+00:00\",\n    \"data\": {\n        \"emergency_contact\": {\n            \"full_name\": \"Jane Doe\",\n            \"phone_number\": \"+0987654321\",\n            \"relation\": \"father\"\n        },\n        \"common_locations\": [\n            {\n                \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\n                \"location_name\": \"Home\",\n                \"full_address\": \"123 Main St, New York, NY 10001\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"dcff9c02-b713-4434-969d-4f83fc9a1bab\",\n                \"location_name\": \"Clinic\",\n                \"full_address\": \"789 Health Blvd, New York, NY 10002\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"0e6df22b-90d9-45f2-aca1-4467449bdf0b\",\n                \"location_name\": \"Hospital\",\n                \"full_address\": \"100 Hospital Rd, New York, NY 10003\",\n                \"trips_count\": 0\n            }\n        ],\n        \"preferred_drivers\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Update an Existing Common Location",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"common_locations\": [\r\n    {\r\n      \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\r\n      \"location_name\": \"New Clinic\",\r\n      \"full_address\": \"999 Health Ave, New York, NY 10004\"\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:29:07 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "719"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:29:07.073811+00:00\",\n    \"data\": {\n        \"emergency_contact\": {\n            \"full_name\": \"Jane Doe\",\n            \"phone_number\": \"+0987654321\",\n            \"relation\": \"father\"\n        },\n        \"common_locations\": [\n            {\n                \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\n                \"location_name\": \"New Clinic\",\n                \"full_address\": \"999 Health Ave, New York, NY 10004\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"dcff9c02-b713-4434-969d-4f83fc9a1bab\",\n                \"location_name\": \"Clinic\",\n                \"full_address\": \"789 Health Blvd, New York, NY 10002\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"0e6df22b-90d9-45f2-aca1-4467449bdf0b\",\n                \"location_name\": \"Hospital\",\n                \"full_address\": \"100 Hospital Rd, New York, NY 10003\",\n                \"trips_count\": 0\n            }\n        ],\n        \"preferred_drivers\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Delete a Common Location",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"common_locations\": [\r\n    {\r\n      \"id\": \"25268d91-3b07-476b-b76d-a0adc34acdc4\",\r\n      \"delete\": true\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:29:47 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "576"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:29:47.671511+00:00\",\n    \"data\": {\n        \"emergency_contact\": {\n            \"full_name\": \"Jane Doe\",\n            \"phone_number\": \"+0987654321\",\n            \"relation\": \"father\"\n        },\n        \"common_locations\": [\n            {\n                \"id\": \"dcff9c02-b713-4434-969d-4f83fc9a1bab\",\n                \"location_name\": \"Clinic\",\n                \"full_address\": \"789 Health Blvd, New York, NY 10002\",\n                \"trips_count\": 0\n            },\n            {\n                \"id\": \"0e6df22b-90d9-45f2-aca1-4467449bdf0b\",\n                \"location_name\": \"Hospital\",\n                \"full_address\": \"100 Hospital Rd, New York, NY 10003\",\n                \"trips_count\": 0\n            }\n        ],\n        \"preferred_drivers\": []\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Passenger Medical Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/medical/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "medical",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/medical/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "medical",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:34:25 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "480"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger medical info fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:34:25.960003+00:00\",\n    \"data\": {\n        \"medical\": {\n            \"special_requirements\": \"standard\",\n            \"medical_notes\": \"Diabetic — carry glucose tablets\",\n            \"special_assistance_needs\": \"Requires assistance boarding\"\n        },\n        \"associated_facilities\": [\n            {\n                \"facility_id\": \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\",\n                \"facility_name\": \"Sunrise Rehab Center\",\n                \"address\": \"10 Care Ln, New York, NY 10010\"\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Passenger Medical Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"special_requirements\": \"oxygen\",\r\n  \"medical_notes\": \"Requires portable oxygen at all times\",\r\n  \"special_assistance_needs\": \"Wheelchair to door\",\r\n  \"add_facilities\": [\r\n    \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\"\r\n  ],\r\n  \"remove_facilities\": [\r\n    \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\"\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/medical/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "medical",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"special_requirements\": \"oxygen\",\r\n  \"medical_notes\": \"Requires portable oxygen at all times\",\r\n  \"special_assistance_needs\": \"Wheelchair to door\",\r\n  \"add_facilities\": [\r\n    \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\"\r\n  ],\r\n  \"remove_facilities\": [\r\n    \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\"\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/medical/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "medical",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:36:39 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "471"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger medical info fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:36:39.384928+00:00\",\n    \"data\": {\n        \"medical\": {\n            \"special_requirements\": \"oxygen\",\n            \"medical_notes\": \"Requires portable oxygen at all times\",\n            \"special_assistance_needs\": \"Wheelchair to door\"\n        },\n        \"associated_facilities\": [\n            {\n                \"facility_id\": \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\",\n                \"facility_name\": \"Sunrise Rehab Center\",\n                \"address\": \"10 Care Ln, New York, NY 10010\"\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Passenger History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/history/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "history",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/history/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "history",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:38:09 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "293"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger history fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:38:09.681203+00:00\",\n    \"data\": {\n        \"recent_trips\": [],\n        \"favorite_destinations\": [\n            {\n                \"destination_name\": \"Clinic\",\n                \"trips_count\": 0\n            },\n            {\n                \"destination_name\": \"Hospital\",\n                \"trips_count\": 0\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Passenger Insurance & Payment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/passengers/:id/others/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "passengers",
+                ":id",
+                "others",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/passengers/:id/others/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "passengers",
+                    ":id",
+                    "others",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8ce38be9-a044-458c-9619-63843e9154c9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:39:34 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "417"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Passenger insurance and payment info fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:39:34.273807+00:00\",\n    \"data\": {\n        \"insurance\": {\n            \"insurance_provider\": \"BlueCross\",\n            \"policy_number\": \"BC-00123\",\n            \"medicare_number\": \"MED-456\",\n            \"effective_date\": \"2024-01-01\",\n            \"expiry_date\": \"2025-01-01\"\n        },\n        \"payment_summary\": {\n            \"total_spent\": \"0.00\",\n            \"paid\": \"0.00\",\n            \"outstanding_balance\": \"0.00\"\n        }\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "facilities",
+      "item": [
+        {
+          "name": "List Facilities",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 21:36:24 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1942"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facilities fetched successfully.\",\n    \"timestamp\": \"2026-05-04T21:36:24.465114+00:00\",\n    \"data\": {\n        \"header\": {\n            \"total_facilities\": 2,\n            \"active_facilities\": 2,\n            \"total_revenue\": \"0.00\",\n            \"outstanding\": \"0.00\"\n        },\n        \"facilities\": [\n            {\n                \"id\": \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\",\n                \"facility_name\": \"Green Valley Care Center\",\n                \"facility_id\": \"FAC-000002\",\n                \"address\": \"245 Wellness Blvd, Los Angeles, CA, 90015\",\n                \"primary_contact_name\": \"Dr. Emily Carter\",\n                \"primary_contact_number\": \"+13235551234\",\n                \"contract_from\": \"2025-03-01\",\n                \"contract_to\": \"2026-03-01\",\n                \"performance\": {\n                    \"trips_by_month\": [\n                        {\n                            \"month\": \"2027-12\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-01\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-02\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-03\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-04\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-05\",\n                            \"trips\": 0\n                        }\n                    ],\n                    \"amounts_by_month\": [\n                        {\n                            \"month\": \"2027-12\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-01\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-02\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-03\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-04\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-05\",\n                            \"amount\": \"0.00\"\n                        }\n                    ],\n                    \"total_amount\": \"0.00\"\n                },\n                \"outstanding\": {\n                    \"amount\": \"0.00\",\n                    \"last_date\": null\n                },\n                \"status\": \"active\"\n            },\n            {\n                \"id\": \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\",\n                \"facility_name\": \"Sunrise Rehab Center\",\n                \"facility_id\": \"FAC-000001\",\n                \"address\": \"10 Care Ln, New York, NY, 10010\",\n                \"primary_contact_name\": \"Dr. Alan Grant\",\n                \"primary_contact_number\": \"+1234567890\",\n                \"contract_from\": \"2024-01-01\",\n                \"contract_to\": \"2025-01-01\",\n                \"performance\": {\n                    \"trips_by_month\": [\n                        {\n                            \"month\": \"2027-12\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-01\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-02\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-03\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-04\",\n                            \"trips\": 0\n                        },\n                        {\n                            \"month\": \"2026-05\",\n                            \"trips\": 0\n                        }\n                    ],\n                    \"amounts_by_month\": [\n                        {\n                            \"month\": \"2027-12\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-01\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-02\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-03\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-04\",\n                            \"amount\": \"0.00\"\n                        },\n                        {\n                            \"month\": \"2026-05\",\n                            \"amount\": \"0.00\"\n                        }\n                    ],\n                    \"total_amount\": \"0.00\"\n                },\n                \"outstanding\": {\n                    \"amount\": \"0.00\",\n                    \"last_date\": null\n                },\n                \"status\": \"active\"\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Facility",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "facility_name",
+                  "value": "Green Valley Care Center",
+                  "type": "text"
+                },
+                {
+                  "key": "facility_type",
+                  "value": "nursing_home",
+                  "type": "text"
+                },
+                {
+                  "key": "street_address",
+                  "value": "245 Wellness Blvd",
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "value": "Los Angeles",
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "value": "CA",
+                  "type": "text"
+                },
+                {
+                  "key": "zip_code",
+                  "value": "90015",
+                  "type": "text"
+                },
+                {
+                  "key": "pickup_instructions",
+                  "value": "Main lobby entrance, check in at reception",
+                  "type": "text"
+                },
+                {
+                  "key": "pc_full_name",
+                  "value": "Dr. Emily Carter",
+                  "type": "text"
+                },
+                {
+                  "key": "pc_title",
+                  "value": "Medical Director",
+                  "type": "text"
+                },
+                {
+                  "key": "pc_department",
+                  "value": "Clinical Services",
+                  "type": "text"
+                },
+                {
+                  "key": "pc_phone",
+                  "value": "+13235551234",
+                  "type": "text"
+                },
+                {
+                  "key": "pc_email",
+                  "value": "emily.carter@gvcare.com",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_full_name",
+                  "value": "Michael Reyes",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_title",
+                  "value": "Accounts Supervisor",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_department",
+                  "value": "Billing",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_phone",
+                  "value": "+13235559876",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_email",
+                  "value": "michael.reyes@gvcare.com",
+                  "type": "text"
+                },
+                {
+                  "key": "bc_insurance_no",
+                  "value": "INS-456",
+                  "type": "text"
+                },
+                {
+                  "key": "contract_number",
+                  "value": "CTR-2025-014",
+                  "type": "text"
+                },
+                {
+                  "key": "start_date",
+                  "value": "2025-03-01",
+                  "type": "text"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-03-01",
+                  "type": "text"
+                },
+                {
+                  "key": "billing_cycle",
+                  "value": "weekly",
+                  "type": "text"
+                },
+                {
+                  "key": "payment_terms",
+                  "value": "Net 15",
+                  "type": "text"
+                },
+                {
+                  "key": "volume_commitment",
+                  "value": "150",
+                  "type": "text"
+                },
+                {
+                  "key": "auto_renewal",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "standard_sedan_rate",
+                  "value": "40.00",
+                  "type": "text"
+                },
+                {
+                  "key": "wheelchair_accessible_rate",
+                  "value": "60.00",
+                  "type": "text"
+                },
+                {
+                  "key": "stretcher_transport_rate",
+                  "value": "90.00",
+                  "type": "text"
+                },
+                {
+                  "key": "wait_time_rate",
+                  "value": "18.00",
+                  "type": "text"
+                },
+                {
+                  "key": "discount_percentage",
+                  "value": "7.50",
+                  "type": "text"
+                },
+                {
+                  "key": "minimum_trips",
+                  "value": "30",
+                  "type": "text"
+                },
+                {
+                  "key": "tax_id",
+                  "value": "TAX-987",
+                  "type": "text"
+                },
+                {
+                  "key": "w9_tax_form",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                },
+                {
+                  "key": "hipaa_agreement",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                },
+                {
+                  "key": "insurance_certificate",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/facilities/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "facility_name",
+                      "value": "Sunrise Rehab Center",
+                      "type": "text"
+                    },
+                    {
+                      "key": "facility_type",
+                      "value": "rehabilitation",
+                      "type": "text"
+                    },
+                    {
+                      "key": "street_address",
+                      "value": "10 Care Ln",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "New York",
+                      "type": "text"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY",
+                      "type": "text"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "10010",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pickup_instructions",
+                      "value": "Use side entrance, call on arrival",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_full_name",
+                      "value": "Dr. Alan Grant",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_title",
+                      "value": "Director",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_department",
+                      "value": "Administration",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_phone",
+                      "value": "+1234567890",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_email",
+                      "value": "alan@sunrise.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_full_name",
+                      "value": "Sarah Connor",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_title",
+                      "value": "Billing Manager",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_department",
+                      "value": "Finance",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_phone",
+                      "value": "+0987654321",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_email",
+                      "value": "sarah@sunrise.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_insurance_no",
+                      "value": "INS-789",
+                      "type": "text"
+                    },
+                    {
+                      "key": "contract_number",
+                      "value": "CTR-2024-001",
+                      "type": "text"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-01-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "billing_cycle",
+                      "value": "monthly",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_terms",
+                      "value": "Net 30",
+                      "type": "text"
+                    },
+                    {
+                      "key": "volume_commitment",
+                      "value": "100",
+                      "type": "text"
+                    },
+                    {
+                      "key": "auto_renewal",
+                      "value": "false",
+                      "type": "text"
+                    },
+                    {
+                      "key": "standard_sedan_rate",
+                      "value": "35.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wheelchair_accessible_rate",
+                      "value": "55.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "stretcher_transport_rate",
+                      "value": "80.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wait_time_rate",
+                      "value": "15.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "discount_percentage",
+                      "value": "5.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "minimum_trips",
+                      "value": "20",
+                      "type": "text"
+                    },
+                    {
+                      "key": "tax_id",
+                      "value": "TAX-001",
+                      "type": "text"
+                    },
+                    {
+                      "key": "w9_tax_form",
+                      "type": "file",
+                      "value": null
+                    },
+                    {
+                      "key": "hipaa_agreement",
+                      "type": "file",
+                      "value": null
+                    },
+                    {
+                      "key": "insurance_certificate",
+                      "type": "file",
+                      "value": null
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 21:33:46 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "461"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 201,\n    \"message\": \"Facility created successfully.\",\n    \"timestamp\": \"2026-05-04T21:33:46.580623+00:00\",\n    \"data\": {\n        \"id\": \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\",\n        \"facility_name\": \"Sunrise Rehab Center\",\n        \"facility_id\": \"FAC-000001\",\n        \"facility_type\": \"rehabilitation\",\n        \"total_trips\": 0,\n        \"total_trips_this_month\": 0,\n        \"total_revenue\": \"0.00\",\n        \"total_revenue_this_month\": \"0.00\",\n        \"outstanding_amount\": \"0.00\",\n        \"avg_payment_days\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "facility_name",
+                      "value": "Green Valley Care Center",
+                      "type": "text"
+                    },
+                    {
+                      "key": "facility_type",
+                      "value": "nursing_home",
+                      "type": "text"
+                    },
+                    {
+                      "key": "street_address",
+                      "value": "245 Wellness Blvd",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "Los Angeles",
+                      "type": "text"
+                    },
+                    {
+                      "key": "state",
+                      "value": "CA",
+                      "type": "text"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "90015",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pickup_instructions",
+                      "value": "Main lobby entrance, check in at reception",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_full_name",
+                      "value": "Dr. Emily Carter",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_title",
+                      "value": "Medical Director",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_department",
+                      "value": "Clinical Services",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_phone",
+                      "value": "+13235551234",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pc_email",
+                      "value": "emily.carter@gvcare.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_full_name",
+                      "value": "Michael Reyes",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_title",
+                      "value": "Accounts Supervisor",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_department",
+                      "value": "Billing",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_phone",
+                      "value": "+13235559876",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_email",
+                      "value": "michael.reyes@gvcare.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bc_insurance_no",
+                      "value": "INS-456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "contract_number",
+                      "value": "CTR-2025-014",
+                      "type": "text"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2025-03-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2026-03-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "billing_cycle",
+                      "value": "weekly",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_terms",
+                      "value": "Net 15",
+                      "type": "text"
+                    },
+                    {
+                      "key": "volume_commitment",
+                      "value": "150",
+                      "type": "text"
+                    },
+                    {
+                      "key": "auto_renewal",
+                      "value": "true",
+                      "type": "text"
+                    },
+                    {
+                      "key": "standard_sedan_rate",
+                      "value": "40.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wheelchair_accessible_rate",
+                      "value": "60.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "stretcher_transport_rate",
+                      "value": "90.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wait_time_rate",
+                      "value": "18.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "discount_percentage",
+                      "value": "7.50",
+                      "type": "text"
+                    },
+                    {
+                      "key": "minimum_trips",
+                      "value": "30",
+                      "type": "text"
+                    },
+                    {
+                      "key": "tax_id",
+                      "value": "TAX-987",
+                      "type": "text"
+                    },
+                    {
+                      "key": "w9_tax_form",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                    },
+                    {
+                      "key": "hipaa_agreement",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                    },
+                    {
+                      "key": "insurance_certificate",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 21:36:09 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "463"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 201,\n    \"message\": \"Facility created successfully.\",\n    \"timestamp\": \"2026-05-04T21:36:09.467527+00:00\",\n    \"data\": {\n        \"id\": \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\",\n        \"facility_name\": \"Green Valley Care Center\",\n        \"facility_id\": \"FAC-000002\",\n        \"facility_type\": \"nursing_home\",\n        \"total_trips\": 0,\n        \"total_trips_this_month\": 0,\n        \"total_revenue\": \"0.00\",\n        \"total_revenue_this_month\": \"0.00\",\n        \"outstanding_amount\": \"0.00\",\n        \"avg_payment_days\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Facility Detail (Header)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:43:07 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "461"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:43:07.217975+00:00\",\n    \"data\": {\n        \"id\": \"056d46c2-1d81-44b5-9c4b-d3fd183305d6\",\n        \"facility_name\": \"Sunrise Rehab Center\",\n        \"facility_id\": \"FAC-000001\",\n        \"facility_type\": \"rehabilitation\",\n        \"total_trips\": 0,\n        \"total_trips_this_month\": 0,\n        \"total_revenue\": \"0.00\",\n        \"total_revenue_this_month\": \"0.00\",\n        \"outstanding_amount\": \"0.00\",\n        \"avg_payment_days\": \"0.00\",\n        \"status\": \"active\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Facility Overview",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/overview/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "overview",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:44:28 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "764"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility overview fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:44:28.023800+00:00\",\n    \"data\": {\n        \"primary_contact\": {\n            \"full_name\": \"Dr. Alan Grant\",\n            \"title\": \"Director\",\n            \"department\": \"Administration\",\n            \"phone\": \"+1234567890\",\n            \"email\": \"alan@sunrise.com\"\n        },\n        \"billing_contact\": {\n            \"full_name\": \"Sarah Connor\",\n            \"title\": \"Billing Manager\",\n            \"department\": \"Finance\",\n            \"phone\": \"+0987654321\",\n            \"email\": \"sarah@sunrise.com\",\n            \"insurance_no\": \"INS-789\"\n        },\n        \"location\": {\n            \"street_address\": \"10 Care Ln\",\n            \"city\": \"New York\",\n            \"state\": \"NY\",\n            \"zip_code\": \"10010\",\n            \"pickup_instructions\": \"Use side entrance, call on arrival\"\n        },\n        \"performance_overview\": {\n            \"completion_rate\": 0,\n            \"completed_trips\": 0,\n            \"total_trips\": 0,\n            \"average_trips_per_week\": 0,\n            \"on_time_payments_pct\": 0\n        }\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Facility Overview",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pc_full_name\": \"Dr. Ellie Sattler\",\r\n  \"pc_title\": \"Medical Director\",\r\n  \"pc_phone\": \"+1112223333\",\r\n  \"pc_email\": \"ellie@sunrise.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/overview/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "overview",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Update Primary Contact Only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"pc_full_name\": \"Dr. Ellie Sattler\",\r\n  \"pc_title\": \"Medical Director\",\r\n  \"pc_phone\": \"+1112223333\",\r\n  \"pc_email\": \"ellie@sunrise.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:45:58 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "776"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility overview updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:45:58.577654+00:00\",\n    \"data\": {\n        \"primary_contact\": {\n            \"full_name\": \"Dr. Ellie Sattler\",\n            \"title\": \"Medical Director\",\n            \"department\": \"Administration\",\n            \"phone\": \"+1112223333\",\n            \"email\": \"ellie@sunrise.com\"\n        },\n        \"billing_contact\": {\n            \"full_name\": \"Sarah Connor\",\n            \"title\": \"Billing Manager\",\n            \"department\": \"Finance\",\n            \"phone\": \"+0987654321\",\n            \"email\": \"sarah@sunrise.com\",\n            \"insurance_no\": \"INS-789\"\n        },\n        \"location\": {\n            \"street_address\": \"10 Care Ln\",\n            \"city\": \"New York\",\n            \"state\": \"NY\",\n            \"zip_code\": \"10010\",\n            \"pickup_instructions\": \"Use side entrance, call on arrival\"\n        },\n        \"performance_overview\": {\n            \"completion_rate\": 0,\n            \"completed_trips\": 0,\n            \"total_trips\": 0,\n            \"average_trips_per_week\": 0,\n            \"on_time_payments_pct\": 0\n        }\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Update Billing Contact Only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"bc_full_name\": \"John Smith\",\r\n  \"bc_email\": \"john@sunrise.com\",\r\n  \"bc_insurance_no\": \"INS-999\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:46:29 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "773"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility overview updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:46:29.380311+00:00\",\n    \"data\": {\n        \"primary_contact\": {\n            \"full_name\": \"Dr. Ellie Sattler\",\n            \"title\": \"Medical Director\",\n            \"department\": \"Administration\",\n            \"phone\": \"+1112223333\",\n            \"email\": \"ellie@sunrise.com\"\n        },\n        \"billing_contact\": {\n            \"full_name\": \"John Smith\",\n            \"title\": \"Billing Manager\",\n            \"department\": \"Finance\",\n            \"phone\": \"+0987654321\",\n            \"email\": \"john@sunrise.com\",\n            \"insurance_no\": \"INS-999\"\n        },\n        \"location\": {\n            \"street_address\": \"10 Care Ln\",\n            \"city\": \"New York\",\n            \"state\": \"NY\",\n            \"zip_code\": \"10010\",\n            \"pickup_instructions\": \"Use side entrance, call on arrival\"\n        },\n        \"performance_overview\": {\n            \"completion_rate\": 0,\n            \"completed_trips\": 0,\n            \"total_trips\": 0,\n            \"average_trips_per_week\": 0,\n            \"on_time_payments_pct\": 0\n        }\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Update Location Only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"street_address\": \"20 Health Ave\",\r\n  \"city\": \"Brooklyn\",\r\n  \"state\": \"NY\",\r\n  \"zip_code\": \"11201\",\r\n  \"pickup_instructions\": \"Ring bell at main gate\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:46:59 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "764"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility overview updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:46:59.441179+00:00\",\n    \"data\": {\n        \"primary_contact\": {\n            \"full_name\": \"Dr. Ellie Sattler\",\n            \"title\": \"Medical Director\",\n            \"department\": \"Administration\",\n            \"phone\": \"+1112223333\",\n            \"email\": \"ellie@sunrise.com\"\n        },\n        \"billing_contact\": {\n            \"full_name\": \"John Smith\",\n            \"title\": \"Billing Manager\",\n            \"department\": \"Finance\",\n            \"phone\": \"+0987654321\",\n            \"email\": \"john@sunrise.com\",\n            \"insurance_no\": \"INS-999\"\n        },\n        \"location\": {\n            \"street_address\": \"20 Health Ave\",\n            \"city\": \"Brooklyn\",\n            \"state\": \"NY\",\n            \"zip_code\": \"11201\",\n            \"pickup_instructions\": \"Ring bell at main gate\"\n        },\n        \"performance_overview\": {\n            \"completion_rate\": 0,\n            \"completed_trips\": 0,\n            \"total_trips\": 0,\n            \"average_trips_per_week\": 0,\n            \"on_time_payments_pct\": 0\n        }\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "Update All at Once",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"pc_full_name\": \"Dr. Ellie Sattler\",\r\n  \"pc_phone\": \"+1112223333\",\r\n  \"bc_email\": \"john@sunrise.com\",\r\n  \"street_address\": \"20 Health Ave\",\r\n  \"city\": \"Brooklyn\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/overview/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "overview",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:47:33 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "764"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility overview updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:47:33.132646+00:00\",\n    \"data\": {\n        \"primary_contact\": {\n            \"full_name\": \"Dr. Ellie Sattler\",\n            \"title\": \"Medical Director\",\n            \"department\": \"Administration\",\n            \"phone\": \"+1112223333\",\n            \"email\": \"ellie@sunrise.com\"\n        },\n        \"billing_contact\": {\n            \"full_name\": \"John Smith\",\n            \"title\": \"Billing Manager\",\n            \"department\": \"Finance\",\n            \"phone\": \"+0987654321\",\n            \"email\": \"john@sunrise.com\",\n            \"insurance_no\": \"INS-999\"\n        },\n        \"location\": {\n            \"street_address\": \"20 Health Ave\",\n            \"city\": \"Brooklyn\",\n            \"state\": \"NY\",\n            \"zip_code\": \"11201\",\n            \"pickup_instructions\": \"Ring bell at main gate\"\n        },\n        \"performance_overview\": {\n            \"completion_rate\": 0,\n            \"completed_trips\": 0,\n            \"total_trips\": 0,\n            \"average_trips_per_week\": 0,\n            \"on_time_payments_pct\": 0\n        }\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Facility Details (Contract / Pricing / Tax)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/details/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "details",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/details/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "details",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:49:33 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "626"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility details fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:49:33.716665+00:00\",\n    \"data\": {\n        \"contract\": {\n            \"contract_number\": \"CTR-2024-001\",\n            \"status\": \"expired\",\n            \"start_date\": \"2024-01-01\",\n            \"end_date\": \"2025-01-01\",\n            \"billing_cycle\": \"monthly\",\n            \"payment_terms\": \"Net 30\",\n            \"volume_commitment\": 100,\n            \"auto_renewal\": false\n        },\n        \"pricing\": {\n            \"standard_sedan_rate\": \"35.00\",\n            \"wheelchair_accessible_rate\": \"55.00\",\n            \"stretcher_transport_rate\": \"80.00\",\n            \"wait_time_rate\": \"15.00\",\n            \"discount_percentage\": \"5.00\",\n            \"minimum_trips\": 20\n        },\n        \"tax\": {\n            \"tax_id\": \"TAX-001\",\n            \"tax_exempt\": false,\n            \"w9_form\": {\n                \"on_file\": false\n            }\n        }\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Facility Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "end_date",
+                  "value": "2026-01-01",
+                  "type": "text"
+                },
+                {
+                  "key": "billing_cycle",
+                  "value": "monthly",
+                  "type": "text"
+                },
+                {
+                  "key": "auto_renewal",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "payment_terms",
+                  "value": "Net 30",
+                  "type": "text"
+                },
+                {
+                  "key": "standard_sedan_rate",
+                  "value": "45.00",
+                  "type": "text"
+                },
+                {
+                  "key": "wheelchair_accessible_rate",
+                  "value": "65.00",
+                  "type": "text"
+                },
+                {
+                  "key": "stretcher_transport_rate",
+                  "value": "95.00",
+                  "type": "text"
+                },
+                {
+                  "key": "wait_time_rate",
+                  "value": "20.00",
+                  "type": "text"
+                },
+                {
+                  "key": "discount_percentage",
+                  "value": "8.50",
+                  "type": "text"
+                },
+                {
+                  "key": "minimum_trips",
+                  "value": "25",
+                  "type": "text"
+                },
+                {
+                  "key": "tax_id",
+                  "value": "TAX-003",
+                  "type": "text"
+                },
+                {
+                  "key": "tax_exempt",
+                  "value": "false",
+                  "type": "text"
+                },
+                {
+                  "key": "w9_tax_form",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/details/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "details",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "end_date",
+                      "value": "2026-01-01",
+                      "type": "text"
+                    },
+                    {
+                      "key": "billing_cycle",
+                      "value": "monthly",
+                      "type": "text"
+                    },
+                    {
+                      "key": "auto_renewal",
+                      "value": "true",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_terms",
+                      "value": "Net 30",
+                      "type": "text"
+                    },
+                    {
+                      "key": "standard_sedan_rate",
+                      "value": "45.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wheelchair_accessible_rate",
+                      "value": "65.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "stretcher_transport_rate",
+                      "value": "95.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wait_time_rate",
+                      "value": "20.00",
+                      "type": "text"
+                    },
+                    {
+                      "key": "discount_percentage",
+                      "value": "8.50",
+                      "type": "text"
+                    },
+                    {
+                      "key": "minimum_trips",
+                      "value": "25",
+                      "type": "text"
+                    },
+                    {
+                      "key": "tax_id",
+                      "value": "TAX-003",
+                      "type": "text"
+                    },
+                    {
+                      "key": "tax_exempt",
+                      "value": "false",
+                      "type": "text"
+                    },
+                    {
+                      "key": "w9_tax_form",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/details/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "details",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:52:31 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PATCH, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "623"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility details updated successfully.\",\n    \"timestamp\": \"2026-05-04T22:52:31.050739+00:00\",\n    \"data\": {\n        \"contract\": {\n            \"contract_number\": \"CTR-2024-001\",\n            \"status\": \"active\",\n            \"start_date\": \"2024-01-01\",\n            \"end_date\": \"2026-01-01\",\n            \"billing_cycle\": \"monthly\",\n            \"payment_terms\": \"Net 30\",\n            \"volume_commitment\": 100,\n            \"auto_renewal\": true\n        },\n        \"pricing\": {\n            \"standard_sedan_rate\": \"45.00\",\n            \"wheelchair_accessible_rate\": \"65.00\",\n            \"stretcher_transport_rate\": \"95.00\",\n            \"wait_time_rate\": \"20.00\",\n            \"discount_percentage\": \"8.50\",\n            \"minimum_trips\": 25\n        },\n        \"tax\": {\n            \"tax_id\": \"TAX-003\",\n            \"tax_exempt\": false,\n            \"w9_form\": {\n                \"on_file\": true\n            }\n        }\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Facility Billing (Invoice List)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/billing/?search=INV-001&date_from=2024-01-01&date_to=2024-01-01",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "billing",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "INV-001",
+                  "description": "Search by invoice number"
+                },
+                {
+                  "key": "date_from",
+                  "value": "2024-01-01",
+                  "description": "Filter by issue date from"
+                },
+                {
+                  "key": "date_to",
+                  "value": "2024-01-01",
+                  "description": "Filter by issue date to"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/billing/?search=INV-001&date_from=2024-01-01&date_to=2024-01-01",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "billing",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "INV-001",
+                      "description": "Search by invoice number"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "2024-01-01",
+                      "description": "Filter by issue date from"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "2024-01-01",
+                      "description": "Filter by issue date to"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:57:06 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "168"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility billing fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:57:06.540931+00:00\",\n    \"data\": {\n        \"invoices\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "success - example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/billing/?search=INV-001&date_from=2024-01-01&date_to=2024-01-01",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "billing",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "INV-001",
+                      "description": "Search by invoice number"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "2024-01-01",
+                      "description": "Filter by issue date from"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "2024-01-01",
+                      "description": "Filter by issue date to"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": "{\r\n  \"success\": true,\r\n  \"statusCode\": 200,\r\n  \"message\": \"Facility billing fetched successfully.\",\r\n  \"timestamp\": \"2026-05-04T22:57:06.540931+00:00\",\r\n  \"data\": {\r\n    \"invoices\": [\r\n      {\r\n        \"invoice_number\": \"INV-2024-001\",\r\n        \"period\": \"2024-01-01 – 2024-01-31\",\r\n        \"paid_date\": \"2024-02-10\",\r\n        \"issue_date\": \"2024-02-01\",\r\n        \"due_date\": \"2024-03-01\",\r\n        \"trips_count\": 42,\r\n        \"amount\": \"1850.00\",\r\n        \"status\": \"paid\"\r\n      }\r\n    ]\r\n  },\r\n  \"errors\": null\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Facility Trip History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/trips/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "trips",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/trips/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "trips",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 22:59:57 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "163"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Facility trips fetched successfully.\",\n    \"timestamp\": \"2026-05-04T22:59:57.392228+00:00\",\n    \"data\": {\n        \"trips\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "success - example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/trips/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "trips",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": "{\r\n  \"success\": true,\r\n  \"statusCode\": 200,\r\n  \"message\": \"Facility trips fetched successfully.\",\r\n  \"timestamp\": \"2026-05-04T22:59:57.392228+00:00\",\r\n  \"data\": {\r\n    \"trips\": [\r\n      {\r\n        \"invoice_number\": \"trip-uuid-...\",\r\n        \"status\": \"completed\",\r\n        \"date_time\": \"2024-12-20\",\r\n        \"passenger_name\": \"John Doe\",\r\n        \"pickup_location\": \"123 Main St, New York, NY\",\r\n        \"trip_type\": \"one_way\",\r\n        \"amount\": \"45.00\"\r\n      }\r\n    ]\r\n  },\r\n  \"errors\": null\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Facility Documents",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/documents/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "documents",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/documents/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "documents",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 23:02:56 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "405"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Documents fetched successfully.\",\n    \"timestamp\": \"2026-05-04T23:02:56.050245+00:00\",\n    \"data\": {\n        \"documents\": [\n            {\n                \"document_id\": \"f3b275a3-1676-46b7-9356-ef5b86db6f51\",\n                \"document_name\": \"W9 Tax Form\",\n                \"document_type\": \"w9_tax_form\",\n                \"file\": \"http://127.0.0.1:8000/media/facilities/documents/Resume_of_Md_pOO0w8K._Joni_Akter_Labu.pdf\",\n                \"uploaded_date\": \"2026-05-05\"\n            }\n        ]\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Facility Document",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document_name",
+                  "value": "HIPAA Compliance Agreement 2025",
+                  "type": "text"
+                },
+                {
+                  "key": "document_type",
+                  "value": "hipaa_agreement",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/facilities/:id/documents/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "facilities",
+                ":id",
+                "documents",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "document_name",
+                      "value": "HIPAA Compliance Agreement 2025",
+                      "type": "text"
+                    },
+                    {
+                      "key": "document_type",
+                      "value": "hipaa_agreement",
+                      "type": "text"
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "/C:/Users/mdjon/Documents/Resume of Md. Joni Akter Labu.pdf"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/facilities/:id/documents/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "facilities",
+                    ":id",
+                    "documents",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "056d46c2-1d81-44b5-9c4b-d3fd183305d6"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 23:05:34 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "413"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 201,\n    \"message\": \"Document uploaded successfully.\",\n    \"timestamp\": \"2026-05-04T23:05:34.850088+00:00\",\n    \"data\": {\n        \"document_id\": \"0016c99a-aab3-4d37-b966-2ef345558062\",\n        \"document_name\": \"HIPAA Compliance Agreement 2025\",\n        \"document_type\": \"hipaa_agreement\",\n        \"file\": \"http://127.0.0.1:8000/media/facilities/documents/Resume_of_Md_OZITCZM._Joni_Akter_Labu.pdf\",\n        \"uploaded_date\": \"2026-05-05\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "trips",
+      "item": [
+        {
+          "name": "Trip List",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/trips/?status=scheduled&date=2025-06-15&driver_id=uuid&vehicle_type=wheelchair_accessible&search=TRP-000012",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "scheduled",
+                      "description": "Filter by trip status",
+                      "type": "text"
+                    },
+                    {
+                      "key": "date",
+                      "value": "2025-06-15",
+                      "description": "Filter by pickup date",
+                      "type": "text"
+                    },
+                    {
+                      "key": "driver_id",
+                      "value": "uuid",
+                      "description": "Filter by assigned driver",
+                      "type": "text"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "wheelchair_accessible",
+                      "description": "Filter by vehicle type",
+                      "type": "text"
+                    },
+                    {
+                      "key": "search",
+                      "value": "TRP-000012",
+                      "description": "Search by trip number, pickup address, or passenger name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 23:21:12 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "262"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Trips fetched successfully.\",\n    \"timestamp\": \"2026-05-04T23:21:12.041609+00:00\",\n    \"data\": {\n        \"header\": {\n            \"total_trips\": 0,\n            \"completed_trips\": 0,\n            \"unassigned_trips\": 0,\n            \"scheduled_trips\": 0,\n            \"cancelled_trips\": 0\n        },\n        \"trips\": []\n    },\n    \"errors\": null\n}"
+            },
+            {
+              "name": "success - example",
+              "originalRequest": {
+                "method": "GET",
+                "header": []
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": "{\r\n  \"success\": true,\r\n  \"statusCode\": 200,\r\n  \"message\": \"Trips fetched successfully.\",\r\n  \"timestamp\": \"2026-05-04T23:05:34.850088+00:00\",\r\n  \"data\": {\r\n    \"header\": {\r\n      \"total_trips\": 120,\r\n      \"completed_trips\": 95,\r\n      \"unassigned_trips\": 5,\r\n      \"scheduled_trips\": 18,\r\n      \"cancelled_trips\": 7\r\n    },\r\n    \"trips\": [\r\n      {\r\n        \"trip_id\": \"TRP-000001\",\r\n        \"pickup_date\": \"2025-06-15\",\r\n        \"pickup_time\": \"09:00:00\",\r\n        \"passenger_name\": \"John Doe\",\r\n        \"passenger_phone\": \"+1234567890\",\r\n        \"pickup_address\": \"123 Main St, New York, NY\",\r\n        \"dropoff_address\": \"789 Health Blvd, New York, NY\",\r\n        \"approximate_dropoff_time\": \"09:35:00\",\r\n        \"assigned_driver_name\": \"Mike Smith\",\r\n        \"vehicle_id\": \"vehicle-uuid-...\",\r\n        \"vehicle_type\": \"sedan\",\r\n        \"trip_status\": \"scheduled\",\r\n        \"payment_status\": \"unpaid\",\r\n        \"total_amount\": \"45.00\"\r\n      }\r\n    ]\r\n  },\r\n  \"errors\": null\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Trip",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"trip_type\": \"single\",\r\n  \"passenger_id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\r\n  \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n  \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\",\r\n  \"pickup_date\": \"2026-06-15\",\r\n  \"pickup_time\": \"09:00:00\",\r\n  \"pickup_notes\": \"Ring bell at side entrance\",\r\n  \"special_requirements\": \"standard\",\r\n  \"estimated_distance\": 4.20,\r\n  \"estimated_duration\": 18,\r\n  \"route_type\": \"fastest\",\r\n  \"base_fare\": \"25.00\",\r\n  \"mileage_cost\": \"8.40\",\r\n  \"total_amount\": \"33.40\",\r\n  \"payment_method\": \"cash\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trips/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trips",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"trip_type\": \"single\",\r\n  \"passenger_id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\r\n  \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n  \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\",\r\n  \"pickup_date\": \"2026-06-15\",\r\n  \"pickup_time\": \"09:00:00\",\r\n  \"pickup_notes\": \"Ring bell at side entrance\",\r\n  \"special_requirements\": \"standard\",\r\n  \"estimated_distance\": 4.20,\r\n  \"estimated_duration\": 18,\r\n  \"route_type\": \"fastest\",\r\n  \"base_fare\": \"25.00\",\r\n  \"mileage_cost\": \"8.40\",\r\n  \"total_amount\": \"33.40\",\r\n  \"payment_method\": \"cash\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/trips/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    ""
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 23:29:37 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "378"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"statusCode\": 400,\n    \"message\": \"Pricing mismatch detected. Please recalculate pricing.\",\n    \"timestamp\": \"2026-05-04T23:29:37.930879+00:00\",\n    \"data\": null,\n    \"errors\": {\n        \"base_fare\": \"Submitted base_fare does not match computed value.\",\n        \"mileage_cost\": \"Submitted mileage_cost does not match computed value.\",\n        \"total_amount\": \"Submitted total_amount does not match computed value.\"\n    }\n}"
+            },
+            {
+              "name": "Create Trip",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"trip_type\": \"single\",\r\n  \"passenger_id\": \"8ce38be9-a044-458c-9619-63843e9154c9\",\r\n  \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n  \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\",\r\n  \"pickup_date\": \"2026-06-15\",\r\n  \"pickup_time\": \"09:00:00\",\r\n  \"pickup_notes\": \"Ring bell at side entrance\",\r\n  \"special_requirements\": \"standard\",\r\n  \"estimated_distance\": 4.20,\r\n  \"estimated_duration\": 18,\r\n  \"route_type\": \"fastest\",\r\n  \"base_fare\": \"25.00\",\r\n  \"mileage_cost\": \"8.40\",\r\n  \"total_amount\": \"33.40\",\r\n  \"payment_method\": \"cash\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/trips/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    ""
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Calculate Route",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n  \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trips/calculate-route/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trips",
+                "calculate-route",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Calculate Route",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n  \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/trips/calculate-route/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    "calculate-route",
+                    ""
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\r\n  \"success\": true,\r\n  \"statusCode\": 200,\r\n  \"message\": \"Route calculated successfully.\",\r\n  \"timestamp\": \"2026-05-04T23:05:34.850088+00:00\",\r\n  \"data\": {\r\n    \"pickup_address\": \"123 Main St, New York, NY 10001\",\r\n    \"dropoff_address\": \"789 Health Blvd, New York, NY 10002\",\r\n    \"estimated_distance\": 4.20,\r\n    \"estimated_duration\": 18,\r\n    \"route_type\": \"fastest\"\r\n  },\r\n  \"errors\": null\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Calculate Pricing",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"estimated_distance\": 4.20,\r\n  \"special_requirements\": \"standard\",\r\n  \"facility_id\": \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trips/calculate-pricing/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trips",
+                "calculate-pricing",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"estimated_distance\": 4.20,\r\n  \"special_requirements\": \"standard\",\r\n  \"facility_id\": \"364d7c1c-be09-4013-8c0d-64e76a5b5d64\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/trips/calculate-pricing/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    "calculate-pricing",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 May 2026 23:46:07 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.13.13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept"
+                },
+                {
+                  "key": "Allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "327"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"statusCode\": 200,\n    \"message\": \"Pricing calculated successfully.\",\n    \"timestamp\": \"2026-05-04T23:46:07.686586+00:00\",\n    \"data\": {\n        \"base_fare\": 40,\n        \"miles_included\": 0,\n        \"estimated_distance\": 4.2,\n        \"billable_distance\": 4.2,\n        \"mileage_cost\": 0,\n        \"discount_applied\": 3,\n        \"total_amount\": 37,\n        \"rate_source\": \"facility_rate\"\n    },\n    \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Trip Detail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trips/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trips",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success - example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/trips/:id/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    ":id",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\r\n  \"success\": true,\r\n  \"statusCode\": 200,\r\n  \"message\": \"Trip fetched successfully.\",\r\n  \"timestamp\": \"2026-05-04T23:05:34.850088+00:00\",\r\n  \"data\": {\r\n    \"trip_number\": \"TRP-000001\",\r\n    \"trip_type\": \"single\",\r\n    \"status\": \"in_route\",\r\n    \"payment_status\": \"unpaid\",\r\n    \"special_requirements\": \"wheelchair\",\r\n    \"passenger\": {\r\n      \"name\": \"John Doe\",\r\n      \"phone\": \"+1234567890\",\r\n      \"email\": \"john@example.com\",\r\n      \"mobility\": \"wheelchair\"\r\n    },\r\n    \"facility\": {\r\n      \"facility_name\": \"Sunrise Rehab Center\",\r\n      \"facility_id\": \"FAC-000001\"\r\n    },\r\n    \"driver\": {\r\n      \"full_name\": \"Mike Smith\",\r\n      \"driver_id\": \"driver-uuid-...\",\r\n      \"phone\": \"+1112223333\"\r\n    },\r\n    \"vehicle\": {\r\n      \"vehicle_id\": \"vehicle-uuid-...\",\r\n      \"vehicle_type\": \"wheelchair_accessible\",\r\n      \"license_plate\": \"NYC-4521\"\r\n    },\r\n    \"pickup\": {\r\n      \"address\": \"123 Main St, New York, NY 10001\",\r\n      \"date\": \"2025-06-15\",\r\n      \"time\": \"09:00:00\",\r\n      \"notes\": \"Ring bell at side entrance\",\r\n      \"approximate_dropoff_time\": \"09:35:00\"\r\n    },\r\n    \"route\": {\r\n      \"estimated_distance\": \"4.20\",\r\n      \"estimated_duration\": 18,\r\n      \"route_type\": \"fastest\"\r\n    },\r\n    \"pricing\": {\r\n      \"base_fare\": \"55.00\",\r\n      \"mileage_cost\": \"0.00\",\r\n      \"total_amount\": \"55.00\",\r\n      \"payment_method\": \"insurance\"\r\n    },\r\n    \"signature\": null,\r\n    \"status_log\": [\r\n      {\r\n        \"from_status\": \"\",\r\n        \"to_status\": \"scheduled\",\r\n        \"changed_at\": \"2026-05-04T22:00:00.000000+00:00\",\r\n        \"changed_by\": \"provider\",\r\n        \"notes\": null\r\n      },\r\n      {\r\n        \"from_status\": \"scheduled\",\r\n        \"to_status\": \"in_route\",\r\n        \"changed_at\": \"2026-05-04T23:00:00.000000+00:00\",\r\n        \"changed_by\": \"provider\",\r\n        \"notes\": null\r\n      }\r\n    ],\r\n    \"created_at\": \"2026-05-04T22:00:00.000000+00:00\"\r\n  },\r\n  \"errors\": null\r\n}"
             }
           ]
         }
