@@ -1,13 +1,12 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Provider, OTPVerification, ProviderSettings, RateCard, SuperAdmin
+from .models import Provider, OTPVerification, ProviderSettings, RateCard
 
 
 # Provider admin - custom display for business-focused fields
 @admin.register(Provider)
 class ProviderAdmin(admin.ModelAdmin):
-    list_display = ['business_email', 'business_name', 'is_active', 'is_verified', 'created_at']
-    list_filter = ['is_active', 'is_verified']
+    list_display = ['business_email', 'business_name', 'is_active', 'is_verified', 'is_staff', 'created_at']
+    list_filter = ['is_active', 'is_verified', 'is_staff']
     search_fields = ['business_email', 'business_name']
     readonly_fields = ['id', 'created_at', 'updated_at']
     ordering = ['-created_at']
@@ -37,10 +36,3 @@ class RateCardAdmin(admin.ModelAdmin):
     list_display = ['provider', 'standard_base_fare', 'wheelchair_base_fare', 'stretcher_base_fare']
     search_fields = ['provider__business_email']
     readonly_fields = ['id']
-
-
-# Super admin
-@admin.register(SuperAdmin)
-class SuperAdminAdmin(admin.ModelAdmin):
-    list_display = ['email', 'is_staff', 'is_superuser', 'created_at']
-    readonly_fields = ['id', 'created_at']

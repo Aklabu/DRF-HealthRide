@@ -25,11 +25,13 @@ class ProviderManager(BaseUserManager):
     def create_superuser(self, business_email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_verified', True)
         return self.create_user(business_email, password, **extra_fields)
 
 
 # Main provider model — one per NEMT business
-class Provider(AbstractBaseUser):
+class Provider(AbstractBaseUser, PermissionsMixin):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -37,6 +39,7 @@ class Provider(AbstractBaseUser):
     business_email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)   # required for Django admin access
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -94,7 +97,6 @@ class OTPVerification(models.Model):
         db_table = 'otp_verifications'
 
     def save(self, *args, **kwargs):
-        # Auto-set expiry to 10 minutes from creation if not set
         if not self.expires_at:
             self.expires_at = timezone.now() + timedelta(minutes=10)
         super().save(*args, **kwargs)
@@ -113,12 +115,12 @@ class ProviderSettings(models.Model):
     provider = models.OneToOneField(Provider, on_delete=models.CASCADE, related_name='settings')
 
     # Trip parameters
-    default_trip_lead_time = models.PositiveIntegerField(default=60)  # minutes
-    auto_assignment_radius = models.DecimalField(max_digits=6, decimal_places=2, default=10.00)  # miles
+    default_trip_lead_time = models.PositiveIntegerField(default=60)
+    auto_assignment_radius = models.DecimalField(max_digits=6, decimal_places=2, default=10.00)
     enable_auto_assignment = models.BooleanField(default=False)
 
     # Cancellation policy
-    cancellation_window = models.PositiveIntegerField(default=24)  # hours
+    cancellation_window = models.PositiveIntegerField(default=24)
     cancellation_fee = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     # Notification preferences
@@ -160,25 +162,3 @@ class RateCard(models.Model):
 
     def __str__(self):
         return f'Rate card for {self.provider.business_email}'
-
-
-# SuperAdmin model — full access to Django admin
-class SuperAdmin(AbstractBaseUser, PermissionsMixin):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True)
-    is_staff = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    objects = BaseUserManager()
-
-    class Meta:
-        db_table = 'super_admins'
-
-    def __str__(self):
-        return self.email
