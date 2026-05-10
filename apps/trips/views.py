@@ -399,6 +399,7 @@ class TripDetailView(APIView):
 
     def get(self, request, id):
         trip = get_object_or_404(Trip, id=id, provider=request.user)
+
         serializer = TripDetailSerializer(trip)
         return CustomResponse.success(
             message='Trip fetched successfully.',
@@ -514,6 +515,7 @@ class TripStatusUpdateView(APIView):
         return CustomResponse.success(
             message=f'Trip status updated to {new_status}.',
             data={
+                'trip_id': str(trip.id),
                 'status': trip.status,
                 'status_log': serializer.data['status_log'],
             },
@@ -690,7 +692,6 @@ class TripSignatureView(APIView):
             message='Signature submitted and trip completed.',
             data={
                 'trip_id': str(trip.id),
-                'trip_number': trip.trip_number,
                 'status': 'completed',
                 'signature': {
                     'signed_at': signature.signed_at,
