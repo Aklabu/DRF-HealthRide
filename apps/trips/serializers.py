@@ -10,7 +10,7 @@ from .models import (
 # Trip list row serializer
 class TripListSerializer(serializers.ModelSerializer):
 
-    trip_id = serializers.CharField(source='trip_number')
+    trip_id = serializers.UUIDField(source='id', read_only=True)
     passenger_name = serializers.SerializerMethodField()
     passenger_phone = serializers.SerializerMethodField()
     assigned_driver_name = serializers.SerializerMethodField()
@@ -224,6 +224,7 @@ class TripStatusLogSerializer(serializers.ModelSerializer):
 # Full trip detail serializer — GET /trips/{id}/
 class TripDetailSerializer(serializers.ModelSerializer):
 
+    trip_id = serializers.UUIDField(source='id', read_only=True)
     passenger = serializers.SerializerMethodField()
     facility = serializers.SerializerMethodField()
     driver = serializers.SerializerMethodField()
@@ -237,7 +238,7 @@ class TripDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = [
-            'trip_number', 'trip_type', 'status', 'payment_status',
+            'trip_id', 'trip_type', 'status', 'payment_status',
             'special_requirements',
             'passenger', 'facility', 'driver', 'vehicle',
             'pickup', 'route', 'pricing',
