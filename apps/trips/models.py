@@ -147,22 +147,28 @@ class Trip(models.Model):
         super().save(*args, **kwargs)
 
     def _generate_trip_number(self):
-        # Get highest existing trip number for this provider
-        existing = Trip.objects.filter(
-            provider=self.provider,
-            trip_number__startswith='TRP-'
-        ).order_by('-trip_number').values_list('trip_number', flat=True).first()
+        # Query globally — trip_number is unique across all providers
+        for _ in range(10):
+            existing = Trip.objects.filter(
+                trip_number__startswith='TRP-'
+            ).order_by('-trip_number').values_list('trip_number', flat=True).first()
 
-        if existing:
-            try:
-                last_num = int(existing.replace('TRP-', ''))
-            except ValueError:
+            if existing:
+                try:
+                    last_num = int(existing.replace('TRP-', ''))
+                except ValueError:
+                    last_num = 0
+            else:
                 last_num = 0
-        else:
-            last_num = 0
 
-        next_num = last_num + 1
-        return f'TRP-{str(next_num).zfill(6)}'
+            candidate = f'TRP-{str(last_num + 1).zfill(6)}'
+
+            # Verify candidate is not already taken before returning
+            if not Trip.objects.filter(trip_number=candidate).exists():
+                return candidate
+
+        # Fallback — use uuid-based suffix to avoid collision
+        return f'TRP-{str(uuid.uuid4().int)[:6].zfill(6)}'
 
 
 # Recurring trip configuration — OneToOne with parent Trip
