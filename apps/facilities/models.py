@@ -91,22 +91,30 @@ class Facility(models.Model):
         super().save(*args, **kwargs)
 
     def _generate_facility_id(self):
-        # Get the highest existing sequence number for this provider
-        existing = Facility.objects.filter(
-            provider=self.provider,
-            facility_id__startswith='FAC-'
-        ).order_by('-facility_id').values_list('facility_id', flat=True).first()
+        # Query globally — facility_id is unique across all providers
+        # Use a retry loop to handle concurrent inserts safely
+        import random
+        for _ in range(10):
+            existing = Facility.objects.filter(
+                facility_id__startswith='FAC-'
+            ).order_by('-facility_id').values_list('facility_id', flat=True).first()
 
-        if existing:
-            try:
-                last_num = int(existing.replace('FAC-', ''))
-            except ValueError:
+            if existing:
+                try:
+                    last_num = int(existing.replace('FAC-', ''))
+                except ValueError:
+                    last_num = 0
+            else:
                 last_num = 0
-        else:
-            last_num = 0
 
-        next_num = last_num + 1
-        return f'FAC-{str(next_num).zfill(6)}'
+            candidate = f'FAC-{str(last_num + 1).zfill(6)}'
+
+            # Check candidate is not already taken before returning
+            if not Facility.objects.filter(facility_id=candidate).exists():
+                return candidate
+
+        # Fallback — use random suffix to avoid collision
+        return f'FAC-{str(uuid.uuid4().int)[:6].zfill(6)}'
 
 
 # Primary contact — OneToOne per facility
