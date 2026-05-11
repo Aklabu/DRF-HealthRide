@@ -27,6 +27,14 @@ urlpatterns = [
     path('api/passengers/', include('apps.passengers.urls')),
     path('api/facilities/', include('apps.facilities.urls')),
     path('api/trips/', include('apps.trips.urls')),
+    path('api/scheduling/', include('apps.scheduling.urls')),
+    path('api/tracking/', include('apps.tracking.urls')),
+    path('api/billing/', include('apps.billing.urls')),
+    path('api/compliance/', include('apps.compliance.urls')),
+    path('api/', include('apps.reports.urls')),
+    path('api/notifications/', include('apps.notifications.urls')),
+    path('api/communication/', include('apps.communication.urls')),
+    path('api/driver/', include('apps.driver_app.urls')),
 ]
 
 # Serve media files in development

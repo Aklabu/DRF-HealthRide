@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'channels',
+    'django_celery_beat',
 
     # Local apps
     'apps.accounts',
@@ -59,6 +61,14 @@ INSTALLED_APPS = [
     'apps.passengers',
     'apps.facilities',
     'apps.trips',
+    'apps.scheduling',
+    'apps.tracking',
+    'apps.billing',
+    'apps.compliance',
+    'apps.reports',
+    'apps.notifications',
+    'apps.communication',
+    'apps.driver_app',
 ]
 
 MIDDLEWARE = [
@@ -196,3 +206,84 @@ CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS')
 
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+
+
+# Django Channels — ASGI channel layer using Redis
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [env('REDIS_URL', default='redis://localhost:6379/0')],
+        },
+    },
+}
+
+# ASGI application path
+ASGI_APPLICATION = 'config.asgi.application'
+
+
+# Stripe configuration
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='')
+PROVIDER_DASHBOARD_URL = env('PROVIDER_DASHBOARD_URL', default='https://healthride.com/billing')
+
+# Field encryption key — must be a 32-byte url-safe base64 string
+# Generate with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+FIELD_ENCRYPTION_KEY = env('FIELD_ENCRYPTION_KEY', default='')
+
+
+# Firebase Cloud Messaging — push notifications
+FIREBASE_SERVER_KEY = env('FIREBASE_SERVER_KEY', default='')
+
+# Twilio — SMS notifications
+TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID', default='')
+TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN', default='')
+TWILIO_FROM_NUMBER = env('TWILIO_FROM_NUMBER', default='')
+
+
+# ── Celery configuration ──────────────────────────────────────────────────────
+# Broker: Redis (same instance used for cache and channel layer)
+CELERY_BROKER_URL = env('REDIS_URL', default='redis://localhost:6379/0')
+
+# Result backend: Redis
+CELERY_RESULT_BACKEND = env('REDIS_URL', default='redis://localhost:6379/0')
+
+# Serialization
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Timezone — use Django's TIME_ZONE
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ENABLE_UTC = True
+
+# Task routing — all tasks go to the default queue unless overridden
+CELERY_TASK_DEFAULT_QUEUE = 'default'
+
+# Retry policy for transient failures
+CELERY_TASK_ACKS_LATE = True
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
+
+# Beat schedule — periodic tasks
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    # Apply late fees to overdue invoices — daily at midnight UTC
+    'billing-apply-late-fees': {
+        'task': 'billing.apply_late_fees',
+        'schedule': crontab(hour=0, minute=0),
+    },
+    # Scan document expiry and create alerts — daily at 6 AM UTC
+    'compliance-scan-document-expiry': {
+        'task': 'compliance.scan_document_expiry',
+        'schedule': crontab(hour=6, minute=0),
+    },
+    # Detect missed pre-trip inspections — daily at 9 AM UTC (mid-morning)
+    'compliance-detect-missed-inspections': {
+        'task': 'compliance.detect_missed_inspections',
+        'schedule': crontab(hour=9, minute=0),
+    },
+}
+
+
+
