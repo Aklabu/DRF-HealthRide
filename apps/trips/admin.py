@@ -11,12 +11,12 @@ class TripAdmin(admin.ModelAdmin):
     list_display = [
         'trip_number', 'trip_type', 'status', 'payment_status',
         'passenger', 'driver', 'pickup_date', 'pickup_time',
-        'total_amount', 'provider', 'created_at',
+        'estimated_total', 'provider', 'created_at',
     ]
     list_filter = ['status', 'payment_status', 'trip_type', 'special_requirements']
     search_fields = ['trip_number', 'pickup_address', 'dropoff_address']
     readonly_fields = [
-        'id', 'trip_number', 'assigned_at', 'started_at',
+        'id', 'trip_number', 'assigned_at', 'confirmed_at', 'started_at',
         'completed_at', 'cancelled_at', 'created_at', 'updated_at',
     ]
     ordering = ['pickup_date', 'pickup_time']

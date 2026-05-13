@@ -1,33 +1,17 @@
 from django.urls import path
 from .views import (
-    TripListCreateView,
-    TripDetailView,
-    TripStatusUpdateView,
+    TripCreateView,
     TripAssignDriverView,
-    TripSignatureView,
-    CalculateRouteView,
-    CalculatePricingView,
+    TripConfirmView,
 )
 
 urlpatterns = [
-    # Trip list and create
-    path('', TripListCreateView.as_view(), name='trip-list-create'),
+    # Step 1 — Create trip, calculate route & pricing, list available drivers
+    path('create', TripCreateView.as_view(), name='trip-create'),
 
-    # Stateless route calculation
-    path('calculate-route/', CalculateRouteView.as_view(), name='trip-calculate-route'),
+    # Step 2 — Assign driver, store authorization & payment method
+    path('<uuid:id>/assign-driver', TripAssignDriverView.as_view(), name='trip-assign-driver'),
 
-    # Stateless pricing calculation
-    path('calculate-pricing/', CalculatePricingView.as_view(), name='trip-calculate-pricing'),
-
-    # Trip detail
-    path('<uuid:id>/', TripDetailView.as_view(), name='trip-detail'),
-
-    # Status update
-    path('<uuid:id>/status/', TripStatusUpdateView.as_view(), name='trip-status-update'),
-
-    # Manual driver assignment
-    path('<uuid:id>/assign-driver/', TripAssignDriverView.as_view(), name='trip-assign-driver'),
-
-    # Signature submission
-    path('<uuid:id>/signature/', TripSignatureView.as_view(), name='trip-signature'),
+    # Step 3 — Confirm or cancel booking, send payment link
+    path('<uuid:id>/confirm', TripConfirmView.as_view(), name='trip-confirm'),
 ]

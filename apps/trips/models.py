@@ -27,24 +27,34 @@ PAYMENT_METHOD_CHOICES = [
     ('cash', 'Cash'),
     ('card', 'Card'),
     ('insurance', 'Insurance'),
-    ('pay_later', 'Pay Later'),
+    ('send_link', 'Send Link'),
+    ('payment_later', 'Payment Later'),
+]
+
+# Payment delivery choices
+PAYMENT_DELIVERY_CHOICES = [
+    ('sms', 'SMS'),
+    ('email', 'Email'),
 ]
 
 # Payment status choices
 PAYMENT_STATUS_CHOICES = [
     ('paid', 'Paid'),
     ('unpaid', 'Unpaid'),
-    ('pay_later', 'Pay Later'),
+    ('pending', 'Pending'),
+    ('payment_later', 'Payment Later'),
 ]
 
-# Trip status choices
+# Trip status choices — 3-step booking lifecycle
 TRIP_STATUS_CHOICES = [
-    ('scheduled', 'Scheduled'),
-    ('in_route', 'In Route'),
-    ('active', 'Active'),
-    ('awaiting_signature', 'Awaiting Signature'),
-    ('completed', 'Completed'),
-    ('cancelled', 'Cancelled'),
+    ('pending', 'Pending'),               # Created in Step 1
+    ('unassigned', 'Unassigned'),         # No drivers available at pickup time
+    ('driver_selected', 'Driver Selected'),  # Driver assigned in Step 2
+    ('confirmed', 'Confirmed'),           # Confirmed in Step 3
+    ('on_way', 'On Way'),                 # Driver en route
+    ('in_progress', 'In Progress'),       # Trip active
+    ('completed', 'Completed'),           # Trip done
+    ('cancelled', 'Cancelled'),           # Cancelled
 ]
 
 # Recurring frequency choices
@@ -71,10 +81,10 @@ class Trip(models.Model):
     # Auto-generated public-facing trip number — TRP-XXXXXX
     trip_number = models.CharField(max_length=20, unique=True, editable=False)
 
-    # Trip type — single or recurring parent
+    # Trip type — single or recurring
     trip_type = models.CharField(max_length=10, choices=TRIP_TYPE_CHOICES, default='single')
 
-    # Parent trip — only set on recurring instances (trip_type = single, generated from recurring parent)
+    # Parent trip — only set on recurring instances
     parent_trip = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True, related_name='recurring_instances'
     )
@@ -101,30 +111,44 @@ class Trip(models.Model):
     approximate_dropoff_time = models.TimeField(null=True, blank=True)
     pickup_notes = models.TextField(null=True, blank=True)
 
+    # Route info — from Google Maps
+    estimated_distance = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    estimated_duration = models.PositiveIntegerField(default=0)  # minutes
+    route_type = models.CharField(max_length=50, blank=True)
+    pickup_latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    pickup_longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    dropoff_latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    dropoff_longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+
     # Requirements
     special_requirements = models.CharField(
         max_length=20, choices=SPECIAL_REQUIREMENTS_CHOICES, default='standard'
     )
 
-    # Route info — populated from calculate-route response
-    estimated_distance = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    estimated_duration = models.PositiveIntegerField(default=0)  # minutes
-    route_type = models.CharField(max_length=50, blank=True)
-
-    # Pricing
+    # Pricing — computed server-side in Step 1
     base_fare = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    mileage_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    mileage_rate = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    total_mileage_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    trip_multiplier = models.DecimalField(max_digits=4, decimal_places=2, default=1.00)
+    estimated_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
-    # Payment
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='cash')
+    # Authorization & medical — stored in Step 2
+    authorization_number = models.CharField(max_length=255, blank=True)
+    medical_notes = models.TextField(null=True, blank=True)
+
+    # Payment — stored in Step 2
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, null=True, blank=True)
+    payment_delivery = models.CharField(max_length=10, choices=PAYMENT_DELIVERY_CHOICES, null=True, blank=True)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='unpaid')
+    payment_link = models.URLField(null=True, blank=True)
 
     # Status
-    status = models.CharField(max_length=25, choices=TRIP_STATUS_CHOICES, default='scheduled')
+    status = models.CharField(max_length=25, choices=TRIP_STATUS_CHOICES, default='pending')
 
-    # Timestamps for status transitions
+    # Timestamps
     assigned_at = models.DateTimeField(null=True, blank=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     cancelled_at = models.DateTimeField(null=True, blank=True)
@@ -141,7 +165,6 @@ class Trip(models.Model):
         return f'{self.trip_number} — {self.status}'
 
     def save(self, *args, **kwargs):
-        # Auto-generate trip_number on first save
         if not self.trip_number:
             self.trip_number = self._generate_trip_number()
         super().save(*args, **kwargs)
@@ -163,11 +186,9 @@ class Trip(models.Model):
 
             candidate = f'TRP-{str(last_num + 1).zfill(6)}'
 
-            # Verify candidate is not already taken before returning
             if not Trip.objects.filter(trip_number=candidate).exists():
                 return candidate
 
-        # Fallback — use uuid-based suffix to avoid collision
         return f'TRP-{str(uuid.uuid4().int)[:6].zfill(6)}'
 
 
@@ -177,12 +198,8 @@ class RecurringTripConfig(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     trip = models.OneToOneField(Trip, on_delete=models.CASCADE, related_name='recurring_config')
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES)
-
-    # Array of integers 0-6 (Monday=0) — used when frequency = weekly
     days_of_week = models.JSONField(default=list)
     end_date = models.DateField()
-
-    # Tracks up to which date instances have been generated
     last_generated_date = models.DateField(null=True, blank=True)
 
     class Meta:
@@ -192,7 +209,7 @@ class RecurringTripConfig(models.Model):
         return f'Recurring config for {self.trip.trip_number}'
 
 
-# Manual passenger contact for non-registered (facility-referred) passengers
+# Manual passenger contact for unregistered passengers
 class TripPassengerContact(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -210,7 +227,7 @@ class TripPassengerContact(models.Model):
         return f'Contact {self.full_name} for {self.trip.trip_number}'
 
 
-# Passenger signature — captured by driver app at trip completion
+# Passenger signature — captured at trip completion
 class TripSignature(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -234,8 +251,6 @@ class TripStatusLog(models.Model):
     from_status = models.CharField(max_length=25)
     to_status = models.CharField(max_length=25)
     changed_at = models.DateTimeField(auto_now_add=True)
-
-    # Who triggered the change — provider, driver, system
     changed_by = models.CharField(max_length=20)
     notes = models.TextField(null=True, blank=True)
 
