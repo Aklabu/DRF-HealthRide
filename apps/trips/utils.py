@@ -184,6 +184,13 @@ def compute_pricing(estimated_distance, special_requirements, provider, facility
 
 
 # Map special requirements to vehicle types for driver matching
+REQ_TO_VEHICLE = {
+    'standard': 'sedan',
+    'oxygen': 'sedan',
+    'wheelchair': 'wheelchair_accessible',
+    'stretcher': 'stretcher',
+}
+
 # Driver availability helpers
 def get_available_drivers(provider, special_requirements, pickup_date, pickup_time):
     """
