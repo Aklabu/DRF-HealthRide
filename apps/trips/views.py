@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 from utils.response import CustomResponse
 from .models import Trip, TripPassengerContact, TripStatusLog
-from .serializers import TripCreateSerializer, AssignDriverSerializer, TripConfirmSerializer
+from .serializers import TripCreateSerializer, AssignDriverSerializer, TripConfirmSerializer, TripListSerializer, TripCancelSerializer
 from .utils import (
     get_route_from_google_maps,
     compute_pricing_v2,
@@ -486,6 +486,110 @@ class TripConfirmView(APIView):
                 },
                 'paymentLink': payment_link_data,
                 'confirmationSent': confirmation_sent,
+            },
+            status_code=200
+        )
+
+# Retrieve list of all trips with summary statistics
+class TripListView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser]
+
+    def get(self, request):
+        provider = request.user
+        
+        # Get all trips for the provider
+        trips = Trip.objects.filter(provider=provider).select_related('driver', 'vehicle').prefetch_related('passenger_contacts')
+        
+        # Calculate statistics
+        total_trips = trips.count()
+        completed_trips = trips.filter(status='completed').count()
+        unassigned_trips = trips.filter(status='unassigned').count()
+        scheduled_trips = trips.filter(status__in=['pending', 'driver_selected', 'confirmed']).count()
+        cancelled_trips = trips.filter(status='cancelled').count()
+        
+        # Serialize trip data
+        serializer = TripListSerializer(trips, many=True)
+        
+        return CustomResponse.success(
+            message='Trip list retrieved successfully.',
+            data={
+                'header': {
+                    'totalTrips': total_trips,
+                    'completedTrips': completed_trips,
+                    'unassignedTrips': unassigned_trips,
+                    'scheduledTrips': scheduled_trips,
+                    'cancelledTrips': cancelled_trips,
+                },
+                'trips': serializer.data,
+            },
+            status_code=200
+        )
+
+
+# Cancel a trip at any stage
+class TripCancelView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser]
+
+    def post(self, request, id):
+        trip = get_object_or_404(Trip, id=id, provider=request.user)
+        
+        # Check if trip can be cancelled
+        if trip.status in ('completed', 'cancelled'):
+            return CustomResponse.error(
+                message=f'Cannot cancel a trip with status: {trip.status}.',
+                status_code=400
+            )
+        
+        serializer = TripCancelSerializer(data=request.data)
+        if not serializer.is_valid():
+            return CustomResponse.error(
+                message='Validation failed.',
+                status_code=400,
+                errors=serializer.errors
+            )
+        
+        cancellation_reason = serializer.validated_data.get('cancellation_reason', '')
+        
+        with transaction.atomic():
+            old_status = trip.status
+            trip.status = 'cancelled'
+            trip.cancelled_at = timezone.now()
+            trip.cancellation_reason = cancellation_reason
+            trip.save()
+            
+            # Release driver if assigned
+            if trip.driver:
+                trip.driver.status_availability = 'available'
+                trip.driver.save(update_fields=['status_availability'])
+            
+            # Log the cancellation
+            TripStatusLog.objects.create(
+                trip=trip,
+                from_status=old_status,
+                to_status='cancelled',
+                changed_by='provider',
+                notes=f'Trip cancelled. Reason: {cancellation_reason}' if cancellation_reason else 'Trip cancelled.',
+            )
+        
+        contact = trip.passenger_contacts.first()
+        
+        return CustomResponse.success(
+            message='Trip cancelled successfully.',
+            data={
+                'tripId': str(trip.id),
+                'tripNumber': trip.trip_number,
+                'status': 'cancelled',
+                'previousStatus': old_status,
+                'cancelledAt': str(trip.cancelled_at),
+                'cancellationReason': cancellation_reason,
+                'passenger': {
+                    'name': contact.full_name if contact else None,
+                    'phone': contact.phone_number if contact else None,
+                },
+                'driverReleased': trip.driver is not None,
+                'message': 'The trip has been cancelled successfully.',
             },
             status_code=200
         )

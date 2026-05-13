@@ -68,3 +68,48 @@ class TripStatusLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripStatusLog
         fields = ['from_status', 'to_status', 'changed_at', 'changed_by', 'notes']
+
+
+# Serialize trip details for trip list API
+class TripListSerializer(serializers.ModelSerializer):
+    passenger_name = serializers.SerializerMethodField()
+    passenger_phone = serializers.SerializerMethodField()
+    assigned_driver_name = serializers.SerializerMethodField()
+    vehicle_id = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Trip
+        fields = [
+            'id',
+            'trip_number',
+            'passenger_name',
+            'passenger_phone',
+            'pickup_address',
+            'dropoff_address',
+            'pickup_date',
+            'pickup_time',
+            'approximate_dropoff_time',
+            'assigned_driver_name',
+            'vehicle_id',
+            'special_requirements',
+            'status',
+        ]
+    
+    def get_passenger_name(self, obj):
+        contact = obj.passenger_contacts.first()
+        return contact.full_name if contact else 'N/A'
+    
+    def get_passenger_phone(self, obj):
+        contact = obj.passenger_contacts.first()
+        return contact.phone_number if contact else 'N/A'
+    
+    def get_assigned_driver_name(self, obj):
+        return obj.driver.full_name if obj.driver else 'Unassigned'
+    
+    def get_vehicle_id(self, obj):
+        return str(obj.vehicle.id) if obj.vehicle else None
+
+
+# Validate trip cancellation request
+class TripCancelSerializer(serializers.Serializer):
+    cancellation_reason = serializers.CharField(required=False, allow_blank=True)
