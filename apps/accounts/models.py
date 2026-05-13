@@ -157,6 +157,11 @@ class RateCard(models.Model):
     stretcher_miles_included = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
     stretcher_per_mile_rate = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 
+    # Oxygen transport rates
+    oxygen_base_fare = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    oxygen_miles_included = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+    oxygen_per_mile_rate = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+
     class Meta:
         db_table = 'rate_cards'
 

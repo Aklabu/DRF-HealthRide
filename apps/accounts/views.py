@@ -528,7 +528,12 @@ class RateCardView(APIView):
                 'base_fare': data['stretcher_base_fare'],
                 'miles_included': data['stretcher_miles_included'],
                 'per_mile_rate': data['stretcher_per_mile_rate'],
-            }
+            },
+            'oxygen': {
+                'base_fare': data['oxygen_base_fare'],
+                'miles_included': data['oxygen_miles_included'],
+                'per_mile_rate': data['oxygen_per_mile_rate'],
+            },
         }
 
         return CustomResponse.success(
@@ -564,7 +569,12 @@ class RateCardView(APIView):
                 'base_fare': data['stretcher_base_fare'],
                 'miles_included': data['stretcher_miles_included'],
                 'per_mile_rate': data['stretcher_per_mile_rate'],
-            }
+            },
+            'oxygen': {
+                'base_fare': data['oxygen_base_fare'],
+                'miles_included': data['oxygen_miles_included'],
+                'per_mile_rate': data['oxygen_per_mile_rate'],
+            },
         }
 
         return CustomResponse.success(
