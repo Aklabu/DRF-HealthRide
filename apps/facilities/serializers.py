@@ -287,3 +287,42 @@ class FacilityDocumentUploadSerializer(serializers.Serializer):
         if value.size > 10 * 1024 * 1024:
             raise serializers.ValidationError('File size must not exceed 10MB.')
         return value
+
+
+# Passenger list row serializer — used in FacilityPassengersView
+class FacilityPassengerListSerializer(serializers.Serializer):
+
+    id = serializers.UUIDField()
+    name = serializers.SerializerMethodField()
+    profile_picture = serializers.SerializerMethodField()
+    phone_number = serializers.CharField()
+    email = serializers.EmailField()
+    date_of_birth = serializers.DateField()
+    mobility = serializers.CharField()
+    insurance_provider = serializers.SerializerMethodField()
+    policy_number = serializers.SerializerMethodField()
+    total_trips = serializers.IntegerField()
+    completed_trips = serializers.IntegerField()
+    outstanding_balance = serializers.DecimalField(max_digits=10, decimal_places=2)
+    status = serializers.CharField()
+
+    def get_name(self, obj):
+        return obj.full_name
+
+    def get_profile_picture(self, obj):
+        request = self.context.get('request')
+        if obj.profile_picture and request:
+            return request.build_absolute_uri(obj.profile_picture.url)
+        return None
+
+    def get_insurance_provider(self, obj):
+        try:
+            return obj.insurance.insurance_provider
+        except Exception:
+            return None
+
+    def get_policy_number(self, obj):
+        try:
+            return obj.insurance.policy_number
+        except Exception:
+            return None

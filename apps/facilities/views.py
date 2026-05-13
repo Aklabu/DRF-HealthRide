@@ -22,6 +22,7 @@ from .serializers import (
     FacilityTaxSerializer,
     FacilityDocumentSerializer,
     FacilityDocumentUploadSerializer,
+    FacilityPassengerListSerializer,
 )
 
 
@@ -602,4 +603,54 @@ class FacilityDocumentView(APIView):
             message='Document uploaded successfully.',
             data=response_serializer.data,
             status_code=201
+        )
+
+
+# Passengers list under a facility
+class FacilityPassengersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        facility = get_object_or_404(Facility, id=id, provider=request.user)
+
+        from apps.passengers.models import PassengerFacility
+        from django.db.models import Q
+
+        # Get all passengers linked to this facility via PassengerFacility M2M
+        associations = PassengerFacility.objects.filter(
+            facility=facility,
+            passenger__provider=request.user,
+        ).select_related(
+            'passenger',
+            'passenger__insurance',
+        ).order_by('-created_at')
+
+        # Optional search by name, phone, or email
+        search = request.query_params.get('search')
+        if search:
+            associations = associations.filter(
+                Q(passenger__first_name__icontains=search) |
+                Q(passenger__last_name__icontains=search) |
+                Q(passenger__phone_number__icontains=search) |
+                Q(passenger__email__icontains=search)
+            )
+
+        # Optional status filter
+        status_filter = request.query_params.get('status')
+        if status_filter:
+            associations = associations.filter(passenger__status=status_filter)
+
+        passengers = [assoc.passenger for assoc in associations]
+
+        serializer = FacilityPassengerListSerializer(
+            passengers, many=True, context={'request': request}
+        )
+
+        return CustomResponse.success(
+            message='Facility passengers fetched successfully.',
+            data={
+                'total_passengers': len(passengers),
+                'passengers': serializer.data,
+            },
+            status_code=200
         )

@@ -7,6 +7,7 @@ from .views import (
     FacilityBillingView,
     FacilityTripsView,
     FacilityDocumentView,
+    FacilityPassengersView,
 )
 
 urlpatterns = [
@@ -30,4 +31,7 @@ urlpatterns = [
 
     # Documents — list and upload
     path('<uuid:id>/documents/', FacilityDocumentView.as_view(), name='facility-documents'),
+
+    # Passengers — list passengers linked to this facility
+    path('<uuid:id>/passengers/', FacilityPassengersView.as_view(), name='facility-passengers'),
 ]
