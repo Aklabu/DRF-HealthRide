@@ -55,6 +55,7 @@ TRIP_STATUS_CHOICES = [
     ('in_progress', 'In Progress'),       # Trip active
     ('completed', 'Completed'),           # Trip done
     ('cancelled', 'Cancelled'),           # Cancelled
+    ('driver_absence', 'Driver Absence'), # Driver assigned but did not start trip at pickup time
 ]
 
 # Recurring frequency choices

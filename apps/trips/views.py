@@ -508,6 +508,7 @@ class TripListView(APIView):
         # Unassigned includes: trips with no drivers at creation time + scheduled trips without a driver
         unassigned_trips = trips.filter(status='unassigned').count() + trips.filter(status='scheduled', driver__isnull=True).count()
         cancelled_trips = trips.filter(status='cancelled').count()
+        driver_absence_trips = trips.filter(status='driver_absence').count()
         
         # Serialize trip data
         serializer = TripListSerializer(trips, many=True)
@@ -521,6 +522,7 @@ class TripListView(APIView):
                     'unassignedTrips': unassigned_trips,
                     'scheduledTrips': scheduled_trips,
                     'cancelledTrips': cancelled_trips,
+                    'driverAbsenceTrips': driver_absence_trips,
                 },
                 'trips': serializer.data,
             },
@@ -541,8 +543,7 @@ class TripCancelView(APIView):
             return CustomResponse.error(
                 message=f'Cannot cancel a trip with status: {trip.status}.',
                 status_code=400
-            )
-        
+            )        
         serializer = TripCancelSerializer(data=request.data)
         if not serializer.is_valid():
             return CustomResponse.error(
