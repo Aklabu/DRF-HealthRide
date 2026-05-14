@@ -283,6 +283,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'compliance.detect_missed_inspections',
         'schedule': crontab(hour=9, minute=0),
     },
+    # Mark scheduled trips as driver_absence when driver did not start at pickup time — every minute
+    'trips-mark-driver-absence': {
+        'task': 'trips.mark_driver_absence_trips',
+        'schedule': crontab(minute='*'),
+    },
 }
 
 
