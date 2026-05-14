@@ -1,14 +1,13 @@
-from decimal import Decimal
-from datetime import datetime, date
+from datetime import datetime, timedelta
 from django.utils import timezone
 
 
-# Map trip special_requirements to required vehicle type
-REQUIREMENTS_TO_VEHICLE = {
-    'standard': ['sedan', 'wheelchair_accessible', 'stretcher'],
-    'oxygen': ['sedan', 'wheelchair_accessible', 'stretcher'],
-    'wheelchair': ['wheelchair_accessible'],
-    'stretcher': ['stretcher'],
+# Map special_requirements to the exact vehicle_type required
+REQ_TO_VEHICLE = {
+    'standard': 'sedan',
+    'oxygen': 'sedan',
+    'wheelchair': 'wheelchair_accessible',
+    'stretcher': 'stretcher',
 }
 
 
@@ -24,172 +23,112 @@ def get_provider_today(provider):
 
 
 def times_overlap(start1, end1, start2, end2):
-    """Return True if two time windows overlap."""
+    """Return True if two time windows [start1, end1) and [start2, end2) overlap."""
     return start1 < end2 and start2 < end1
 
 
 def driver_has_conflict(driver, schedule_date, pickup_time, dropoff_time, exclude_trip=None):
     """
-    Check if a driver already has a ScheduleSlot on schedule_date whose
-    trip time window overlaps with pickup_time → dropoff_time.
-    Optionally exclude a specific trip from the conflict check.
+    Return (True, conflicting_trip) if driver has an overlapping trip on schedule_date,
+    otherwise (False, None). Optionally exclude a specific trip from the check.
     """
-    from .models import ScheduleSlot
+    from apps.trips.models import Trip
 
-    slots = ScheduleSlot.objects.filter(
-        schedule__date=schedule_date,
+    qs = Trip.objects.filter(
         driver=driver,
-    ).select_related('trip')
-
+        pickup_date=schedule_date,
+        status__in=['scheduled', 'on_way', 'in_progress'],
+    )
     if exclude_trip:
-        slots = slots.exclude(trip=exclude_trip)
+        qs = qs.exclude(pk=exclude_trip.pk)
 
-    for slot in slots:
-        slot_start = slot.trip.pickup_time
-        slot_end = slot.trip.approximate_dropoff_time or slot.trip.pickup_time
-
+    for trip in qs:
+        slot_start = trip.pickup_time
+        slot_end = trip.approximate_dropoff_time or trip.pickup_time
         if times_overlap(pickup_time, dropoff_time, slot_start, slot_end):
-            return True, slot.trip
+            return True, trip
 
     return False, None
 
 
 def vehicle_satisfies_requirements(vehicle, special_requirements):
-    """Return True if the vehicle type satisfies the trip's special_requirements."""
-    allowed = REQUIREMENTS_TO_VEHICLE.get(special_requirements, ['sedan'])
-    return vehicle.vehicle_type in allowed
+    """Return True if the vehicle's type matches the requirement."""
+    required = REQ_TO_VEHICLE.get(special_requirements, 'sedan')
+    return vehicle.vehicle_type == required
 
 
-def get_driver_distance_to_address(driver, pickup_address):
+def find_best_driver(trip, provider, schedule_date):
     """
-    Attempt to get straight-line distance from driver's last known location
-    to pickup_address via the tracking app.
-    Returns distance in miles, or a large fallback value if unavailable.
-    """
-    try:
-        from apps.tracking.models import DriverLocation
-        loc = DriverLocation.objects.get(driver=driver)
-        if hasattr(loc, 'distance_to_address'):
-            return float(loc.distance_to_address(pickup_address))
-        # If coordinates are available, return a placeholder
-        return 0.0
-    except Exception:
-        # Tracking app unavailable — return 0 so driver is not penalized
-        return 0.0
+    Find the best driver for a trip on schedule_date.
 
-
-def run_ai_assignment(trip, provider, schedule_date):
-    """
-    Run the AI assignment algorithm for a single trip.
-
-    Returns:
-        selected_driver (Driver or None),
-        drivers_considered (list of scored candidate dicts),
-        reason (str)
+    Strategy:
+      1. Exact match — active driver, correct vehicle type, available on the weekday,
+         pickup_time within availability window, no schedule conflict.
+      2. Next available — among drivers with correct vehicle type, find the one whose
+         last trip on that date ends soonest (smallest approximate_dropoff_time).
+      3. No driver found — returns (None, None, reason).
     """
     from apps.drivers.models import Driver, DriverAvailability
-    from .models import ScheduleSlot
+    from apps.trips.models import Trip
 
     pickup_time = trip.pickup_time
     dropoff_time = trip.approximate_dropoff_time or pickup_time
     pickup_weekday = schedule_date.weekday()
+    required_vehicle_type = REQ_TO_VEHICLE.get(trip.special_requirements, 'sedan')
 
-    # Step 1 — Candidate pool: all active drivers for this provider
-    all_drivers = Driver.objects.filter(
+    # Pool: active drivers with the correct vehicle type
+    candidates = Driver.objects.filter(
         provider=provider,
         status_employment='active',
-    ).select_related('vehicle')
+        vehicle__vehicle_type=required_vehicle_type,
+    ).select_related('vehicle').order_by('-on_time_rate')
 
-    drivers_considered = []
-    qualified = []
-
-    for driver in all_drivers:
-        candidate = {
-            'driver_id': str(driver.id),
-            'driver_name': driver.full_name,
-            'distance_miles': None,
-            'current_load': 0,
-            'availability_match': False,
-            'vehicle_match': False,
-            'score': None,
-            'eliminated_reason': None,
-        }
-
-        # Hard filter 1 — vehicle type match
-        if not driver.vehicle:
-            candidate['eliminated_reason'] = 'No vehicle assigned'
-            drivers_considered.append(candidate)
-            continue
-
-        if not vehicle_satisfies_requirements(driver.vehicle, trip.special_requirements):
-            candidate['eliminated_reason'] = (
-                f'Vehicle type {driver.vehicle.vehicle_type} does not satisfy '
-                f'{trip.special_requirements} requirement'
-            )
-            drivers_considered.append(candidate)
-            continue
-
-        candidate['vehicle_match'] = True
-
-        # Hard filter 2 — availability schedule
+    # Pass 1 — exact match at pickup time
+    for driver in candidates:
         try:
             avail = DriverAvailability.objects.get(
                 driver=driver,
                 day_of_week=pickup_weekday,
                 is_available=True,
             )
-            if not (avail.start_time <= pickup_time <= avail.end_time):
-                candidate['eliminated_reason'] = (
-                    f'Pickup time {pickup_time} outside availability window '
-                    f'{avail.start_time}–{avail.end_time}'
-                )
-                drivers_considered.append(candidate)
-                continue
-            candidate['availability_match'] = True
         except DriverAvailability.DoesNotExist:
-            candidate['eliminated_reason'] = f'Not available on day {pickup_weekday}'
-            drivers_considered.append(candidate)
             continue
 
-        # Hard filter 3 — no schedule conflict
-        has_conflict, conflicting_trip = driver_has_conflict(
-            driver, schedule_date, pickup_time, dropoff_time, exclude_trip=trip
-        )
+        if not (avail.start_time <= pickup_time <= avail.end_time):
+            continue
+
+        has_conflict, _ = driver_has_conflict(driver, schedule_date, pickup_time, dropoff_time)
         if has_conflict:
-            candidate['eliminated_reason'] = (
-                f'Schedule conflict with trip {str(conflicting_trip.id)}'
-            )
-            drivers_considered.append(candidate)
             continue
 
-        # Passed all hard filters — compute score
-        distance = get_driver_distance_to_address(driver, trip.pickup_address)
-        current_load = ScheduleSlot.objects.filter(
-            schedule__date=schedule_date,
-            driver=driver,
-        ).count()
+        return driver, 'exact_match', 'Driver available at pickup time'
 
-        distance_score = distance
-        load_score = current_load * 10
-        final_score = distance_score + load_score
+    # Pass 2 — next available: driver who finishes their last trip soonest
+    best_driver = None
+    best_free_at = None
 
-        candidate['distance_miles'] = round(distance, 2)
-        candidate['current_load'] = current_load
-        candidate['score'] = round(final_score, 2)
+    for driver in candidates:
+        last_trip = (
+            Trip.objects.filter(
+                driver=driver,
+                pickup_date=schedule_date,
+                status__in=['scheduled', 'on_way', 'in_progress'],
+            )
+            .order_by('-approximate_dropoff_time')
+            .first()
+        )
+        free_at = last_trip.approximate_dropoff_time if last_trip else None
 
-        drivers_considered.append(candidate)
-        qualified.append((driver, final_score))
+        # Driver has no trips that day — treat as immediately free
+        if free_at is None:
+            free_at = pickup_time
 
-    if not qualified:
-        return None, drivers_considered, 'No available drivers passed all hard filters for this trip.'
+        if best_free_at is None or free_at < best_free_at:
+            best_free_at = free_at
+            best_driver = driver
 
-    # Step 4 — Sort by score ascending, select lowest
-    qualified.sort(key=lambda x: x[1])
-    selected_driver = qualified[0][0]
+    if best_driver:
+        reason = f'No driver at pickup time. Assigned next available driver free at {best_free_at}.'
+        return best_driver, 'next_available', reason
 
-    reason = (
-        f'Selected {selected_driver.full_name} with score '
-        f'{qualified[0][1]:.2f} from {len(qualified)} qualified candidate(s).'
-    )
-
-    return selected_driver, drivers_considered, reason
+    return None, None, 'No drivers available for this trip.'
