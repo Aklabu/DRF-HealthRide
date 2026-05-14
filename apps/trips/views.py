@@ -389,7 +389,6 @@ class TripConfirmView(APIView):
                 message=f'Trip confirmation is only allowed on driver_selected trips. Current status: {trip.status}.',
                 status_code=400
             )
-
         serializer = TripConfirmSerializer(data=request.data)
         if not serializer.is_valid():
             return CustomResponse.error(
@@ -436,7 +435,7 @@ class TripConfirmView(APIView):
         payment_link_data = None
 
         with transaction.atomic():
-            trip.status = 'confirmed'
+            trip.status = 'scheduled'
             trip.confirmed_at = timezone.now()
 
             # Generate and send payment link if send_link method
@@ -459,7 +458,7 @@ class TripConfirmView(APIView):
             TripStatusLog.objects.create(
                 trip=trip,
                 from_status='driver_selected',
-                to_status='confirmed',
+                to_status='scheduled',
                 changed_by='provider',
             )
 
@@ -467,9 +466,9 @@ class TripConfirmView(APIView):
         confirmation_sent = stub_send_confirmation(trip=trip, contact=contact)
 
         return CustomResponse.success(
-            message='Trip confirmed successfully.',
+            message='Trip scheduled successfully.',
             data={
-                'status': 'confirmed',
+                'status': 'scheduled',
                 'tripId': str(trip.id),
                 'bookingConfirmation': {
                     'passengerName': contact.full_name if contact else None,
@@ -504,8 +503,10 @@ class TripListView(APIView):
         # Calculate statistics
         total_trips = trips.count()
         completed_trips = trips.filter(status='completed').count()
-        unassigned_trips = trips.filter(status='unassigned').count()
-        scheduled_trips = trips.filter(status__in=['pending', 'driver_selected', 'confirmed']).count()
+        # Confirmed trips with a driver assigned count as scheduled
+        scheduled_trips = trips.filter(status='scheduled', driver__isnull=False).count()
+        # Unassigned includes: trips with no drivers at creation time + scheduled trips without a driver
+        unassigned_trips = trips.filter(status='unassigned').count() + trips.filter(status='scheduled', driver__isnull=True).count()
         cancelled_trips = trips.filter(status='cancelled').count()
         
         # Serialize trip data
