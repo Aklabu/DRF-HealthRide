@@ -12,7 +12,7 @@ REQ_TO_VEHICLE = {
 
 
 def get_provider_today(provider):
-    """Return today's date in the provider's configured timezone."""
+    # Return today's date in the provider's configured timezone
     import pytz
     tz_name = getattr(provider, 'timezone', 'UTC') or 'UTC'
     try:
@@ -23,15 +23,12 @@ def get_provider_today(provider):
 
 
 def times_overlap(start1, end1, start2, end2):
-    """Return True if two time windows [start1, end1) and [start2, end2) overlap."""
+    # Return True if two time windows [start1, end1) and [start2, end2) overlap
     return start1 < end2 and start2 < end1
 
 
 def driver_has_conflict(driver, schedule_date, pickup_time, dropoff_time, exclude_trip=None):
-    """
-    Return (True, conflicting_trip) if driver has an overlapping trip on schedule_date,
-    otherwise (False, None). Optionally exclude a specific trip from the check.
-    """
+    # Check if driver has an overlapping trip on schedule_date, optionally excluding a specific trip
     from apps.trips.models import Trip
 
     qs = Trip.objects.filter(
@@ -52,22 +49,13 @@ def driver_has_conflict(driver, schedule_date, pickup_time, dropoff_time, exclud
 
 
 def vehicle_satisfies_requirements(vehicle, special_requirements):
-    """Return True if the vehicle's type matches the requirement."""
+    # Return True if the vehicle's type matches the trip's special requirement
     required = REQ_TO_VEHICLE.get(special_requirements, 'sedan')
     return vehicle.vehicle_type == required
 
 
 def find_best_driver(trip, provider, schedule_date):
-    """
-    Find the best driver for a trip on schedule_date.
-
-    Strategy:
-      1. Exact match — active driver, correct vehicle type, available on the weekday,
-         pickup_time within availability window, no schedule conflict.
-      2. Next available — among drivers with correct vehicle type, find the one whose
-         last trip on that date ends soonest (smallest approximate_dropoff_time).
-      3. No driver found — returns (None, None, reason).
-    """
+    # Find the best available driver for a trip using exact match then next-available fallback
     from apps.drivers.models import Driver, DriverAvailability
     from apps.trips.models import Trip
 
@@ -76,14 +64,14 @@ def find_best_driver(trip, provider, schedule_date):
     pickup_weekday = schedule_date.weekday()
     required_vehicle_type = REQ_TO_VEHICLE.get(trip.special_requirements, 'sedan')
 
-    # Pool: active drivers with the correct vehicle type
+    # Pool: active drivers with the correct vehicle type, sorted by rating
     candidates = Driver.objects.filter(
         provider=provider,
         status_employment='active',
         vehicle__vehicle_type=required_vehicle_type,
     ).select_related('vehicle').order_by('-on_time_rate')
 
-    # Pass 1 — exact match at pickup time
+    # Pass 1 — find a driver available at the exact pickup time with no conflicts
     for driver in candidates:
         try:
             avail = DriverAvailability.objects.get(
@@ -103,7 +91,7 @@ def find_best_driver(trip, provider, schedule_date):
 
         return driver, 'exact_match', 'Driver available at pickup time'
 
-    # Pass 2 — next available: driver who finishes their last trip soonest
+    # Pass 2 — pick the driver whose last trip on this date ends soonest
     best_driver = None
     best_free_at = None
 
@@ -119,7 +107,7 @@ def find_best_driver(trip, provider, schedule_date):
         )
         free_at = last_trip.approximate_dropoff_time if last_trip else None
 
-        # Driver has no trips that day — treat as immediately free
+        # Driver has no trips that day — treat as immediately free at pickup time
         if free_at is None:
             free_at = pickup_time
 

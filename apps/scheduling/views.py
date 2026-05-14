@@ -23,7 +23,7 @@ from .utils import (
 
 
 def _parse_date(raw):
-    """Parse a YYYY-MM-DD string and return a date object, or None on failure."""
+    # Parse a YYYY-MM-DD string and return a date object, or None on failure
     try:
         return datetime.strptime(str(raw), '%Y-%m-%d').date()
     except (ValueError, TypeError):
@@ -31,7 +31,7 @@ def _parse_date(raw):
 
 
 def _trip_queryset(provider):
-    """Base queryset for trips scoped to a provider with common select/prefetch."""
+    # Base queryset for trips scoped to a provider with common select/prefetch
     return (
         Trip.objects.filter(provider=provider)
         .select_related('driver', 'vehicle', 'passenger')
@@ -39,7 +39,7 @@ def _trip_queryset(provider):
     )
 
 
-# GET /api/scheduling/header/?date=YYYY-MM-DD
+# Return daily trip statistics for a specific date
 class SchedulingHeaderView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -78,7 +78,7 @@ class SchedulingHeaderView(APIView):
         )
 
 
-# GET /api/scheduling/trips/?date=YYYY-MM-DD
+# Return all scheduled trips with assigned drivers for a specific date
 class ScheduledTripListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -105,7 +105,7 @@ class ScheduledTripListView(APIView):
         )
 
 
-# PATCH /api/scheduling/trips/<uuid:trip_id>/?date=YYYY-MM-DD
+# Update pickup time or assigned driver for a scheduled trip on a specific date
 class ScheduledTripUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -193,8 +193,7 @@ class ScheduledTripUpdateView(APIView):
                 trip.pickup_time = data['pickup_time']
                 update_fields.append('pickup_time')
 
-                # Recompute approximate_dropoff_time using stored estimated_duration
-                duration = int(trip.estimated_duration or 0)
+                # Recompute approximate_dropoff_time using stored estimated_duration                duration = int(trip.estimated_duration or 0)
                 if duration > 0:
                     trip.approximate_dropoff_time = compute_dropoff_time(data['pickup_time'], duration)
                     update_fields.append('approximate_dropoff_time')
@@ -223,7 +222,7 @@ class ScheduledTripUpdateView(APIView):
         )
 
 
-# GET /api/scheduling/unassigned/?date=YYYY-MM-DD
+# Return all unassigned and driver_absence trips for a specific date
 class UnassignedTripListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -253,7 +252,7 @@ class UnassignedTripListView(APIView):
         )
 
 
-# POST /api/scheduling/auto-assign/?date=YYYY-MM-DD
+# Auto-assign the best available driver to each unassigned trip on a specific date
 class AutoAssignView(APIView):
     permission_classes = [IsAuthenticated]
 
