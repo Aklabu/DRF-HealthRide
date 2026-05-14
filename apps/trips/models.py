@@ -50,7 +50,7 @@ TRIP_STATUS_CHOICES = [
     ('pending', 'Pending'),               # Created in Step 1
     ('unassigned', 'Unassigned'),         # No drivers available at pickup time
     ('driver_selected', 'Driver Selected'),  # Driver assigned in Step 2
-    ('confirmed', 'Confirmed'),           # Confirmed in Step 3
+    ('scheduled', 'Scheduled'),           # Confirmed in Step 3
     ('on_way', 'On Way'),                 # Driver en route
     ('in_progress', 'In Progress'),       # Trip active
     ('completed', 'Completed'),           # Trip done
