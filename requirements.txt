@@ -12,10 +12,10 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
 colorama==0.4.6
-cron_descriptor==2.0.8
+cron-descriptor==1.4.5
 cryptography==44.0.3
 Django==6.0.4
-django-celery-beat==2.7.0
+django-celery-beat==2.9.0
 django-cors-headers==4.9.0
 django-environ==0.13.0
 django-timezone-field==7.2.1
