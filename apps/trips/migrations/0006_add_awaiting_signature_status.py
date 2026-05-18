@@ -1,8 +1,12 @@
 """
-Migration: align Trip.status choices to the canonical set.
+Migration: add awaiting_signature to Trip.status choices.
 
-Replaces the old in_route/active values with on_way/in_progress in both
-the choices list and any existing rows.
+The existing chain (0001–0005) already covers:
+  pending, unassigned, driver_selected, scheduled,
+  on_way, in_progress, completed, cancelled, driver_absence
+
+This migration adds the missing awaiting_signature status used by the
+driver_app signature capture flow.
 """
 from django.db import migrations, models
 
@@ -10,23 +14,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('trips', '0001_initial'),
+        ('trips', '0005_add_driver_absence_status'),
     ]
 
     operations = [
-        # Step 1 — migrate any existing rows that used the old status values
-        migrations.RunSQL(
-            sql="""
-                UPDATE trips SET status = 'on_way'      WHERE status = 'in_route';
-                UPDATE trips SET status = 'in_progress' WHERE status = 'active';
-            """,
-            reverse_sql="""
-                UPDATE trips SET status = 'in_route' WHERE status = 'on_way';
-                UPDATE trips SET status = 'active'   WHERE status = 'in_progress';
-            """,
-        ),
-
-        # Step 2 — update the choices on the model field
         migrations.AlterField(
             model_name='trip',
             name='status',
