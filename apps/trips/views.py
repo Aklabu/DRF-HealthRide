@@ -595,3 +595,36 @@ class TripCancelView(APIView):
             },
             status_code=200
         )
+
+
+# DELETE /trips/{id}/delete — permanently delete a trip record
+class TripDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        trip = get_object_or_404(Trip, id=id, provider=request.user)
+
+        # Only allow deletion of terminal-state trips
+        non_deletable = ('on_way', 'in_progress', 'awaiting_signature')
+        if trip.status in non_deletable:
+            return CustomResponse.error(
+                message=(
+                    f'Cannot delete a trip that is currently in progress '
+                    f'(status: {trip.status}). Cancel the trip first.'
+                ),
+                status_code=400
+            )
+
+        with transaction.atomic():
+            # Release driver availability if trip was scheduled with a driver
+            if trip.driver and trip.status in ('pending', 'unassigned', 'driver_selected', 'scheduled'):
+                trip.driver.status_availability = 'available'
+                trip.driver.save(update_fields=['status_availability'])
+
+            trip_number = trip.trip_number
+            trip.delete()
+
+        return CustomResponse.success(
+            message=f'Trip {trip_number} deleted successfully.',
+            status_code=200
+        )

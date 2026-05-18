@@ -5,6 +5,7 @@ from .views import (
     TripConfirmView,
     TripListView,
     TripCancelView,
+    TripDeleteView,
 )
 
 urlpatterns = [
@@ -16,10 +17,13 @@ urlpatterns = [
 
     # Confirm or cancel booking, send payment link
     path('<uuid:id>/confirm', TripConfirmView.as_view(), name='trip-confirm'),
-    
+
     # Retrieve list of all trips with statistics
     path('list', TripListView.as_view(), name='trip-list'),
-    
+
     # Cancel a trip at any stage
     path('<uuid:id>/cancel', TripCancelView.as_view(), name='trip-cancel'),
+
+    # Delete a trip record (terminal states only)
+    path('<uuid:id>/delete', TripDeleteView.as_view(), name='trip-delete'),
 ]
