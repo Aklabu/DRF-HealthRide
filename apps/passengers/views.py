@@ -494,3 +494,37 @@ class PassengerOthersView(APIView):
             },
             status_code=200
         )
+
+
+# DELETE /passengers/{id}/ — permanently delete a passenger
+class PassengerDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        passenger = get_object_or_404(Passenger, id=id, provider=request.user)
+
+        # Block deletion if passenger has any active (non-terminal) trips
+        try:
+            from apps.trips.models import Trip
+            active_trip = Trip.objects.filter(
+                passenger=passenger,
+                status__in=['pending', 'unassigned', 'driver_selected', 'scheduled',
+                            'on_way', 'in_progress', 'awaiting_signature'],
+            ).first()
+            if active_trip:
+                return CustomResponse.error(
+                    message=(
+                        f'Cannot delete a passenger with an active trip '
+                        f'({active_trip.trip_number}, status: {active_trip.status}).'
+                    ),
+                    status_code=400
+                )
+        except Exception:
+            pass
+
+        passenger.delete()
+
+        return CustomResponse.success(
+            message='Passenger deleted successfully.',
+            status_code=200
+        )

@@ -6,6 +6,7 @@ from .views import (
     PassengerMedicalView,
     PassengerHistoryView,
     PassengerOthersView,
+    PassengerDeleteView,
 )
 
 urlpatterns = [
@@ -14,6 +15,9 @@ urlpatterns = [
 
     # Passenger detail and update
     path('<uuid:id>/', PassengerDetailView.as_view(), name='passenger-detail'),
+
+    # Passenger delete
+    path('<uuid:id>/delete/', PassengerDeleteView.as_view(), name='passenger-delete'),
 
     # Overview — emergency contact + common locations + preferred drivers
     path('<uuid:id>/overview/', PassengerOverviewView.as_view(), name='passenger-overview'),
