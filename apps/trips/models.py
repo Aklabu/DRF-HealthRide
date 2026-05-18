@@ -51,8 +51,9 @@ TRIP_STATUS_CHOICES = [
     ('unassigned', 'Unassigned'),         # No drivers available at pickup time
     ('driver_selected', 'Driver Selected'),  # Driver assigned in Step 2
     ('scheduled', 'Scheduled'),           # Confirmed in Step 3
-    ('on_way', 'On Way'),                 # Driver en route
-    ('in_progress', 'In Progress'),       # Trip active
+    ('on_way', 'On Way'),                 # Driver en route to pickup
+    ('in_progress', 'In Progress'),       # Passenger onboard, trip active
+    ('awaiting_signature', 'Awaiting Signature'),  # Arrived at dropoff, pending signature
     ('completed', 'Completed'),           # Trip done
     ('cancelled', 'Cancelled'),           # Cancelled
     ('driver_absence', 'Driver Absence'), # Driver assigned but did not start trip at pickup time
