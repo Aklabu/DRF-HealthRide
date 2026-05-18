@@ -411,7 +411,8 @@ class VehicleDocumentView(APIView):
 
 
 # assign or unassign driver to vehicle
-class VehicleAssignDriverView(APIView):    permission_classes = [IsAuthenticated]
+class VehicleAssignDriverView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
         vehicle = get_object_or_404(Vehicle, id=id, provider=request.user)
