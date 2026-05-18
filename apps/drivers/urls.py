@@ -8,6 +8,7 @@ from .views import (
     DriverWorkingHoursView,
     DriverEarningsView,
     DriverPayoutView,
+    DriverDeleteView,
 )
 
 urlpatterns = [
@@ -16,6 +17,9 @@ urlpatterns = [
 
     # Driver detail and update
     path('<uuid:id>/', DriverDetailView.as_view(), name='driver-detail'),
+
+    # Driver delete
+    path('<uuid:id>/delete/', DriverDeleteView.as_view(), name='driver-delete'),
 
     # Overview — emergency contact + vehicle + certifications
     path('<uuid:id>/overview/', DriverOverviewView.as_view(), name='driver-overview'),

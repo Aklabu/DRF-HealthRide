@@ -729,3 +729,33 @@ class DriverPayoutView(APIView):
             },
             status_code=201
         )
+
+
+# DELETE /drivers/{id}/ — permanently delete a driver
+class DriverDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        driver = get_object_or_404(Driver, id=id, provider=request.user)
+
+        # Block deletion if driver is currently on an active trip
+        if driver.status_availability == 'on_trip':
+            return CustomResponse.error(
+                message='Cannot delete a driver who is currently on a trip.',
+                status_code=400
+            )
+
+        with transaction.atomic():
+            # Clear bidirectional vehicle assignment before deletion
+            if driver.vehicle:
+                vehicle = driver.vehicle
+                vehicle.assigned_driver = None
+                vehicle.assigned_since = None
+                vehicle.save(update_fields=['assigned_driver', 'assigned_since'])
+
+            driver.delete()
+
+        return CustomResponse.success(
+            message='Driver deleted successfully.',
+            status_code=200
+        )
