@@ -8,6 +8,7 @@ from .views import (
     FacilityTripsView,
     FacilityDocumentView,
     FacilityPassengersView,
+    FacilityDeleteView,
 )
 
 urlpatterns = [
@@ -16,6 +17,9 @@ urlpatterns = [
 
     # Facility detail header
     path('<uuid:id>/', FacilityDetailView.as_view(), name='facility-detail'),
+
+    # Facility delete
+    path('<uuid:id>/delete/', FacilityDeleteView.as_view(), name='facility-delete'),
 
     # Overview — contacts + location + performance
     path('<uuid:id>/overview/', FacilityOverviewView.as_view(), name='facility-overview'),

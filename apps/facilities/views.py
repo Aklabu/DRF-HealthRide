@@ -654,3 +654,37 @@ class FacilityPassengersView(APIView):
             },
             status_code=200
         )
+
+
+# DELETE /facilities/{id}/ — permanently delete a facility
+class FacilityDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        facility = get_object_or_404(Facility, id=id, provider=request.user)
+
+        # Block deletion if facility has any active (non-terminal) trips
+        try:
+            from apps.trips.models import Trip
+            active_trip = Trip.objects.filter(
+                facility=facility,
+                status__in=['pending', 'unassigned', 'driver_selected', 'scheduled',
+                            'on_way', 'in_progress', 'awaiting_signature'],
+            ).first()
+            if active_trip:
+                return CustomResponse.error(
+                    message=(
+                        f'Cannot delete a facility with an active trip '
+                        f'({active_trip.trip_number}, status: {active_trip.status}).'
+                    ),
+                    status_code=400
+                )
+        except Exception:
+            pass
+
+        facility.delete()
+
+        return CustomResponse.success(
+            message='Facility deleted successfully.',
+            status_code=200
+        )
