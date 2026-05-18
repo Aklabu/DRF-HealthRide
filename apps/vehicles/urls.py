@@ -6,6 +6,7 @@ from .views import (
     VehicleMaintenanceView,
     VehicleDocumentView,
     VehicleAssignDriverView,
+    VehicleDeleteView,
 )
 
 urlpatterns = [
@@ -14,6 +15,9 @@ urlpatterns = [
 
     # Vehicle detail and update
     path('<uuid:id>/', VehicleDetailView.as_view(), name='vehicle-detail'),
+
+    # Vehicle delete
+    path('<uuid:id>/delete/', VehicleDeleteView.as_view(), name='vehicle-delete'),
 
     # Vehicle specifications
     path('<uuid:id>/specifications/', VehicleSpecificationsView.as_view(), name='vehicle-specifications'),

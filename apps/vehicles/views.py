@@ -411,8 +411,7 @@ class VehicleDocumentView(APIView):
 
 
 # assign or unassign driver to vehicle
-class VehicleAssignDriverView(APIView):
-    permission_classes = [IsAuthenticated]
+class VehicleAssignDriverView(APIView):    permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
         vehicle = get_object_or_404(Vehicle, id=id, provider=request.user)
@@ -497,5 +496,34 @@ class VehicleAssignDriverView(APIView):
                 },
                 'assigned_since': vehicle.assigned_since,
             },
+            status_code=200
+        )
+
+
+# DELETE /vehicles/{id}/ — permanently delete a vehicle
+class VehicleDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        vehicle = get_object_or_404(Vehicle, id=id, provider=request.user)
+
+        # Block deletion if vehicle is currently on a trip
+        if vehicle.status == 'on_trip':
+            return CustomResponse.error(
+                message='Cannot delete a vehicle that is currently on a trip.',
+                status_code=400
+            )
+
+        with transaction.atomic():
+            # Clear bidirectional driver assignment before deletion
+            if vehicle.assigned_driver:
+                driver = vehicle.assigned_driver
+                driver.vehicle = None
+                driver.save(update_fields=['vehicle'])
+
+            vehicle.delete()
+
+        return CustomResponse.success(
+            message='Vehicle deleted successfully.',
             status_code=200
         )
