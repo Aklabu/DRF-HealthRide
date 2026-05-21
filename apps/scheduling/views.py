@@ -193,7 +193,8 @@ class ScheduledTripUpdateView(APIView):
                 trip.pickup_time = data['pickup_time']
                 update_fields.append('pickup_time')
 
-                # Recompute approximate_dropoff_time using stored estimated_duration                duration = int(trip.estimated_duration or 0)
+                # Recompute approximate_dropoff_time using stored estimated_duration
+                duration = int(trip.estimated_duration or 0)
                 if duration > 0:
                     trip.approximate_dropoff_time = compute_dropoff_time(data['pickup_time'], duration)
                     update_fields.append('approximate_dropoff_time')
