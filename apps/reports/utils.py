@@ -344,7 +344,7 @@ def compute_dashboard_header(provider):
 
     active_trips = Trip.objects.filter(
         provider=provider,
-        status__in=['in_route', 'active', 'awaiting_signature'],
+        status__in=['on_way', 'in_progress', 'awaiting_signature'],
     ).count()
 
     completed_today = Trip.objects.filter(
@@ -357,7 +357,7 @@ def compute_dashboard_header(provider):
         provider=provider,
         status='completed',
         completed_at__date=today,
-    ).aggregate(total=Sum('total_amount'))['total'] or Decimal('0.00')
+    ).aggregate(total=Sum('estimated_total'))['total'] or Decimal('0.00')
 
     cancellations_today = Trip.objects.filter(
         provider=provider,
@@ -390,7 +390,7 @@ def compute_earnings_chart(provider, chart_range='week'):
         )
         .annotate(day=TruncDay('completed_at'))
         .values('day')
-        .annotate(amount=Sum('total_amount'))
+        .annotate(amount=Sum('estimated_total'))
         .order_by('day')
     )
 
@@ -433,12 +433,12 @@ def compute_driver_status(provider):
         # Determine operational status
         op_status = STATUS_MAP.get(driver.status_availability, 'offline')
 
-        # Check if driver is en_route (trip status = in_route)
+        # Check if driver is en_route (trip status = on_way)
         if driver.status_availability == 'on_trip':
             try:
                 from apps.trips.models import Trip
                 has_in_route = Trip.objects.filter(
-                    driver=driver, status='in_route'
+                    driver=driver, status='on_way'
                 ).exists()
                 if has_in_route:
                     op_status = 'en_route_to_pickup'

@@ -273,7 +273,7 @@ class ActiveTripsView(APIView):
 
         qs = Trip.objects.filter(
             provider=request.user,
-            status__in=['in_route', 'active', 'awaiting_signature'],
+            status__in=['on_way', 'in_progress', 'awaiting_signature'],
         ).select_related('passenger', 'driver', 'vehicle').prefetch_related(
             'passenger_contacts'
         ).order_by('started_at')
