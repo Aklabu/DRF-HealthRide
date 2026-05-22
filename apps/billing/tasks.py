@@ -153,8 +153,7 @@ def send_invoice_email(invoice_id):
         raise
 
 
-# ── Celery task registration ──────────────────────────────────────────────────
-
+# Celery task registration 
 try:
     from config.celery import app as celery_app
 

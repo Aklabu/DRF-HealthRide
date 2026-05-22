@@ -20,7 +20,7 @@ def _get_fernet():
 
 
 def encrypt_field(plaintext: str) -> str:
-    """Encrypt a plaintext string. Returns base64-encoded ciphertext."""
+    # Encrypt a plaintext string. Returns base64-encoded ciphertext
     fernet = _get_fernet()
     if fernet is None:
         # cryptography not installed — store as-is (dev fallback only)
@@ -29,7 +29,7 @@ def encrypt_field(plaintext: str) -> str:
 
 
 def decrypt_field(ciphertext: str) -> str:
-    """Decrypt a ciphertext string. Returns plaintext."""
+    # Decrypt a ciphertext string. Returns plaintext
     fernet = _get_fernet()
     if fernet is None:
         return ciphertext
@@ -40,7 +40,7 @@ def decrypt_field(ciphertext: str) -> str:
 
 
 def mask_number(number: str, keep_last: int = 4) -> str:
-    """Return a masked version of a number string, keeping only the last N digits."""
+    # Return a masked version of a number string, keeping only the last N digits
     number = str(number).strip()
     if len(number) <= keep_last:
         return number

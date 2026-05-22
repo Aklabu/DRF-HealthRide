@@ -28,8 +28,7 @@ from .encryption import encrypt_field, mask_number
 from .utils import generate_invoice_number, update_facility_on_payment
 
 
-# ── Stripe Connect ────────────────────────────────────────────────────────────
-
+# Stripe Account Connect
 class StripeConnectView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -214,8 +213,7 @@ class StripeWebhookView(APIView):
         )
 
 
-# ── Bank Account ──────────────────────────────────────────────────────────────
-
+#  Bank Account Management
 class BankAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -277,8 +275,7 @@ class BankAccountView(APIView):
         )
 
 
-# ── Invoices ──────────────────────────────────────────────────────────────────
-
+# Invoices Management
 class InvoiceListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -345,7 +342,7 @@ class InvoiceListCreateView(APIView):
             status='completed',
             pickup_date__gte=data['period_start'],
             pickup_date__lte=data['period_end'],
-            payment_status__in=['unpaid', 'pay_later'],
+            payment_status__in=['unpaid', 'payment_later'],
         )
 
         if facility:
@@ -357,7 +354,7 @@ class InvoiceListCreateView(APIView):
         already_billed = InvoiceItem.objects.values_list('trip_id', flat=True)
         trip_qs = trip_qs.exclude(id__in=already_billed)
 
-        trips = list(trip_qs.select_related('passenger', 'passenger_contacts'))
+        trips = list(trip_qs.select_related('passenger').prefetch_related('passenger_contacts'))
 
         if not trips:
             return CustomResponse.error(
@@ -366,7 +363,7 @@ class InvoiceListCreateView(APIView):
             )
 
         # Compute totals
-        subtotal = sum(t.total_amount for t in trips)
+        subtotal = sum(t.estimated_total for t in trips)
         trips_count = len(trips)
 
         # Fetch invoice template
@@ -416,7 +413,7 @@ class InvoiceListCreateView(APIView):
                     pickup_address=trip.pickup_address,
                     dropoff_address=trip.dropoff_address,
                     trip_type=trip.trip_type,
-                    amount=trip.total_amount,
+                    amount=trip.estimated_total,
                 )
 
             # Update facility outstanding stats
@@ -515,8 +512,7 @@ class InvoiceStatusUpdateView(APIView):
         )
 
 
-# ── Invoice Template ──────────────────────────────────────────────────────────
-
+# Invoice Template View
 class InvoiceTemplateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -555,8 +551,7 @@ class InvoiceTemplateView(APIView):
         )
 
 
-# ── Late Fee Config ───────────────────────────────────────────────────────────
-
+# Late Fee Config View
 class LateFeeConfigView(APIView):
     permission_classes = [IsAuthenticated]
 
