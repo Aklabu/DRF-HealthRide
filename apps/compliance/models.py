@@ -5,8 +5,7 @@ from apps.drivers.models import Driver
 from apps.vehicles.models import Vehicle
 
 
-# ── Choices ───────────────────────────────────────────────────────────────────
-
+# Constants defining choice fields used by compliance models
 FUEL_LEVEL_CHOICES = [
     ('full', 'Full'),
     ('three_quarters', 'Three Quarters'),
@@ -68,8 +67,7 @@ SEVERITY_CHOICES = [
 ]
 
 
-# ── Models ────────────────────────────────────────────────────────────────────
-
+# Model definitions for compliance tracking
 class PreTripInspection(models.Model):
     """Daily vehicle checklist submitted by a driver before starting trips."""
 
@@ -86,12 +84,12 @@ class PreTripInspection(models.Model):
     odometer = models.PositiveIntegerField()
     fuel_level = models.CharField(max_length=20, choices=FUEL_LEVEL_CHOICES)
 
-    # Auto-derived from checklist results
+    # Status derived automatically from checklist results
     status = models.CharField(
         max_length=15, choices=INSPECTION_STATUS_CHOICES, default='all_clear'
     )
 
-    # Checklist items
+    # Pre-trip inspection checklist fields
     vehicle_exterior = models.CharField(max_length=5, choices=CHECKLIST_CHOICES)
     vehicle_interior = models.CharField(max_length=5, choices=CHECKLIST_CHOICES)
     tires = models.CharField(max_length=5, choices=CHECKLIST_CHOICES)
@@ -105,16 +103,16 @@ class PreTripInspection(models.Model):
     )
     dashboard_warning_lights = models.CharField(max_length=5, choices=CHECKLIST_CHOICES)
 
-    # Issue details — required if any field = fail
+    # Issue details; required when any checklist item failed
     issue_description = models.TextField(null=True, blank=True)
     issue_photo = models.FileField(upload_to='compliance/inspections/', null=True, blank=True)
 
-    # Driver signature captured from driver app
+    # Captured driver signature file from the driver app
     signature = models.FileField(upload_to='compliance/signatures/')
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Safety-critical fields — escalate to critical severity if failed
+    # Checklist fields considered safety-critical for alert escalation
     SAFETY_CRITICAL_FIELDS = ['brakes', 'lights', 'tires', 'safety_equipment']
 
     class Meta:
@@ -133,11 +131,8 @@ class PreTripInspection(models.Model):
         )
 
 
+# ComplianceDocument and ComplianceAlert models serve as the core of our compliance tracking system.
 class ComplianceDocument(models.Model):
-    """
-    Central expiry-tracking registry for compliance-critical documents.
-    Does not store the file — file lives in drivers or vehicles app.
-    """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     provider = models.ForeignKey(
@@ -151,13 +146,13 @@ class ComplianceDocument(models.Model):
     document_type = models.CharField(max_length=30, choices=DOCUMENT_TYPE_CHOICES)
     document_number = models.CharField(max_length=100, blank=True, null=True)
 
-    # URL/path pointing to the file in the source app — not stored here
+    # Reference to the compliance file location stored in another app
     file_reference = models.URLField(max_length=500, blank=True)
 
     upload_date = models.DateField()
     expiration_date = models.DateField(null=True, blank=True)
 
-    # Computed and written by Celery task
+    # Fields calculated by periodic background task
     status = models.CharField(
         max_length=15, choices=DOCUMENT_STATUS_CHOICES, default='valid'
     )
@@ -167,7 +162,7 @@ class ComplianceDocument(models.Model):
     # Suppresses duplicate notifications within 7 days
     notified_at = models.DateTimeField(null=True, blank=True)
 
-    # Soft delete — preserves audit trail
+    # Soft delete flag to preserve audit history
     is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -181,11 +176,8 @@ class ComplianceDocument(models.Model):
         return f'{self.document_type} — {self.holder_name}'
 
 
+# ComplianceAlert records are created when a compliance issue is detected, such as an expiring document or a failed inspection.
 class ComplianceAlert(models.Model):
-    """
-    Persistent compliance alert records surfaced on the provider dashboard.
-    Separate from notifications — alerts are permanent audit records.
-    """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     provider = models.ForeignKey(
@@ -236,6 +228,7 @@ class ComplianceAlert(models.Model):
         return f'[{self.severity.upper()}] {self.title}'
 
 
+# InspectionSchedule is used to track expected pre-trip inspections for driver-vehicle pairs on specific dates
 class InspectionSchedule(models.Model):
     """
     Tracks which driver-vehicle pairs are expected to submit a pre-trip
@@ -251,10 +244,10 @@ class InspectionSchedule(models.Model):
 
     expected_date = models.DateField()
 
-    # Flipped to True when PreTripInspection is submitted for this schedule
+    # Marked true once the expected inspection is submitted
     inspection_submitted = models.BooleanField(default=False)
 
-    # Linked on submission
+    # Reference to the submitted inspection
     inspection = models.ForeignKey(
         PreTripInspection, on_delete=models.SET_NULL,
         null=True, blank=True, related_name='schedule'
